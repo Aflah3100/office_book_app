@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:office_book_app/core/app_assets.dart';
 import 'package:office_book_app/core/app_colors.dart';
+import 'package:office_book_app/features/auth/Linux/widgets/login_widgets.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
@@ -11,12 +12,21 @@ class LoginScreen extends StatelessWidget {
     final screenHeight = MediaQuery.sizeOf(context).height * 1;
     return Scaffold(
       backgroundColor: AppColors.scaffoldBackground,
+
       body: SafeArea(
         child:
         //Base-container
-        SizedBox(
+        Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.center,
+              end: Alignment.bottomLeft,
+              colors: [Color(0xFF1F1F1F), Color(0xFF121212), Color(0xFF2C2C2C)],
+            ),
+          ),
           width: double.maxFinite,
           height: double.maxFinite,
+
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -26,12 +36,12 @@ class LoginScreen extends StatelessWidget {
                 height: screenHeight,
                 child: Center(
                   child: SizedBox(
-                    width: screenWidth * 0.4,
-                    height: screenHeight * 0.7,
+                    width: screenWidth * 0.35,
+                    height: screenHeight * 0.65,
                     child: ClipRRect(
                       borderRadius: BorderRadius.all(Radius.circular(50)),
                       child: Image.asset(
-                        AppAssets.officeBookImage1,
+                        AppAssets.officeBookImage2,
                         fit: BoxFit.fill,
                       ),
                     ),
@@ -40,12 +50,12 @@ class LoginScreen extends StatelessWidget {
               ),
               //Right-Side-Login-Container
               Expanded(
-                child: Container(
-                  color: Colors.grey,
+                child: SizedBox(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [],
+                    mainAxisSize: MainAxisSize.min,
+                    children: [LoginContainer()],
                   ),
                 ),
               ),
