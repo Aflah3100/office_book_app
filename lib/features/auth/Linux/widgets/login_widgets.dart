@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:office_book_app/core/app_assets.dart';
 import 'package:office_book_app/core/app_colors.dart';
+import 'package:office_book_app/core/app_enums.dart';
+import 'package:office_book_app/shared/providers/login_provider.dart';
+import 'package:provider/provider.dart';
 
 class LoginContainer extends StatelessWidget {
   const LoginContainer({super.key});
@@ -14,8 +17,7 @@ class LoginContainer extends StatelessWidget {
       elevation: 10,
       child: Container(
         width: 500,
-        height: 550,
-        padding: const EdgeInsets.only(top: 60),
+        padding: const EdgeInsets.symmetric(vertical: 30),
         decoration: BoxDecoration(
           gradient: LinearGradient(
             colors: [Color(0xFF3A3A3A), Color(0xFF2C2C2C)],
@@ -23,6 +25,7 @@ class LoginContainer extends StatelessWidget {
           borderRadius: BorderRadius.circular(24),
         ),
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             CircleAvatar(
               backgroundColor: Colors.blue[100],
@@ -46,32 +49,78 @@ class LoginContainer extends StatelessWidget {
                 color: Colors.white,
               ),
             ),
-            const SizedBox(height: 20),
-            SizedBox(
-              width: 450,
-              child: LoginTextField(
-                hintText: 'Username',
-                textEditingController: TextEditingController(),
-              ),
-            ),
-            const SizedBox(height: 30),
-            SizedBox(
-              width: 450,
-              child: LoginTextField(
-                hintText: "Password",
-                textEditingController: TextEditingController(),
-                obscureText: true,
-              ),
-            ),
-
             const SizedBox(height: 30),
 
-            //Login-button
-            const LoginButton(),
-            const SizedBox(height: 10),
+            //SignIn-SignUp-Fields
+            Consumer<Loginprovider>(
+              builder: (ctx, loginProvider, _) {
+                return Column(
+                  children: [
+                    (loginProvider.getLoginMode() == LoginState.signUp)
+                        ? Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            SizedBox(
+                              width: 200,
+                              child: LoginTextField(
+                                hintText: 'First Name',
+                                textEditingController: TextEditingController(),
+                              ),
+                            ),
+                            SizedBox(width: 50),
+                            SizedBox(
+                              width: 200,
+                              child: LoginTextField(
+                                hintText: 'LastName',
+                                textEditingController: TextEditingController(),
+                              ),
+                            ),
+                          ],
+                        )
+                        : SizedBox(),
+                    (loginProvider.getLoginMode() == LoginState.signUp)
+                        ? SizedBox(height: 20)
+                        : SizedBox(),
+                    SizedBox(
+                      width: 450,
+                      child: LoginTextField(
+                        hintText: 'Email',
+                        textEditingController: TextEditingController(),
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    SizedBox(
+                      width: 450,
+                      child: LoginTextField(
+                        hintText: "Password",
+                        textEditingController: TextEditingController(),
+                        obscureText: true,
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    (loginProvider.getLoginMode() == LoginState.signUp)
+                        ? SizedBox(
+                          width: 450,
+                          child: LoginTextField(
+                            hintText: "Confirm Password",
+                            textEditingController: TextEditingController(),
+                            obscureText: true,
+                          ),
+                        )
+                        : SizedBox(),
 
-            //SignUp-Button
-            const SignUpButton(),
+                    const SizedBox(height: 30),
+
+                    //Authentication-Button
+                    const LoginButton(),
+                    const SizedBox(height: 10),
+
+                    //SignIn-SignUp-Button
+                    const SignInSignUpButton(),
+                  ],
+                );
+              },
+            ),
           ],
         ),
       ),
@@ -79,6 +128,7 @@ class LoginContainer extends StatelessWidget {
   }
 }
 
+//Login-TextFormField
 class LoginTextField extends StatelessWidget {
   const LoginTextField({
     super.key,
@@ -97,10 +147,12 @@ class LoginTextField extends StatelessWidget {
       keyboardType: TextInputType.name,
       controller: textEditingController,
       obscureText: obscureText != null ? obscureText! : false,
-
+      style: TextStyle(color: AppColors.textSecondary),
       decoration: InputDecoration(
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+
         hintText: hintText,
+        labelStyle: TextStyle(color: AppColors.textPrimary),
         hintStyle: GoogleFonts.publicSans(
           fontSize: 16,
           fontWeight: FontWeight.w400,
@@ -111,25 +163,42 @@ class LoginTextField extends StatelessWidget {
   }
 }
 
-class SignUpButton extends StatelessWidget {
-  const SignUpButton({super.key});
+//SignIn/SignUp Button
+class SignInSignUpButton extends StatelessWidget {
+  const SignInSignUpButton({super.key});
 
   @override
   Widget build(BuildContext context) {
     return TextButton(
-      onPressed: () {},
-      child: Text(
-        'New to Office Desk? Sign Up',
-        style: GoogleFonts.publicSans(
-          fontWeight: FontWeight.w300,
-          fontSize: 14,
-          color: AppColors.iconColor,
-        ),
+      onPressed: () {
+        final currentLoginState = context.read<Loginprovider>().getLoginMode();
+
+        context.read<Loginprovider>().setLoginMode(
+          loginMode:
+              (currentLoginState == LoginState.signIn)
+                  ? LoginState.signUp
+                  : LoginState.signIn,
+        );
+      },
+      child: Consumer<Loginprovider>(
+        builder: (ctx, loginProvider, _) {
+          return Text(
+            (loginProvider.getLoginMode() == LoginState.signIn)
+                ? 'New to Office Desk? Sign Up'
+                : "Already a user? Sign In",
+            style: GoogleFonts.publicSans(
+              fontWeight: FontWeight.w300,
+              fontSize: 14,
+              color: AppColors.iconColor,
+            ),
+          );
+        },
       ),
     );
   }
 }
 
+//User-Authentication Button
 class LoginButton extends StatelessWidget {
   const LoginButton({super.key});
 
@@ -147,13 +216,19 @@ class LoginButton extends StatelessWidget {
           borderRadius: BorderRadius.circular(30),
         ),
         child: Center(
-          child: Text(
-            'LOGIN',
-            style: GoogleFonts.publicSans(
-              color: AppColors.textPrimary,
-              fontSize: 16,
-              fontWeight: FontWeight.w600,
-            ),
+          child: Consumer<Loginprovider>(
+            builder: (ctx, loginProvider, _) {
+              return Text(
+                ((loginProvider.getLoginMode() == LoginState.signIn))
+                    ? 'LOGIN'
+                    : 'SIGNUP',
+                style: GoogleFonts.publicSans(
+                  color: AppColors.textPrimary,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                ),
+              );
+            },
           ),
         ),
       ),
