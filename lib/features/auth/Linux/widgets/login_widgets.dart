@@ -33,13 +33,17 @@ class LoginContainer extends StatelessWidget {
               child: Image.asset(AppAssets.officeBookImage1),
             ),
             const SizedBox(height: 10),
-            Text(
-              'Welcome Back',
-              style: GoogleFonts.publicSans(
-                fontSize: 30,
-                fontWeight: FontWeight.w700,
-                color: AppColors.primaryOrangeLight,
-              ),
+            Consumer<Loginprovider>(
+              builder: (ctx,provider,_) {
+                return Text(
+                  (provider.getLoginMode()==LoginState.signUp)?'Welcome In':"Welcome Back",
+                  style: GoogleFonts.publicSans(
+                    fontSize: 30,
+                    fontWeight: FontWeight.w700,
+                    color: AppColors.primaryOrangeLight,
+                  ),
+                );
+              }
             ),
             Text(
               'Organize Your Work Day',
