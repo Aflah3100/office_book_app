@@ -6,7 +6,8 @@ import 'package:office_book_app/shared/router/route_constants.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
-  static const routeName=RouteConstants.loginScreenLinux;
+  static const routeName = RouteConstants.loginScreenLinux;
+
 
   @override
   Widget build(BuildContext context) {
@@ -53,7 +54,7 @@ class LoginScreen extends StatelessWidget {
               //Right-Side-Login-Container
               Expanded(
                 child: SizedBox(
-                  child: Column(  
+                  child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisSize: MainAxisSize.min,

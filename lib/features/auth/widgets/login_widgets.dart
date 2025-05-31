@@ -1,13 +1,25 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:office_book_app/core/app_assets.dart';
 import 'package:office_book_app/core/app_colors.dart';
 import 'package:office_book_app/core/app_enums.dart';
+import 'package:office_book_app/features/home/screens/home_screen.dart';
+import 'package:office_book_app/shared/hive_database/models/user_model.dart';
 import 'package:office_book_app/shared/providers/login_provider.dart';
+import 'package:office_book_app/shared/services/authentication_services.dart';
 import 'package:provider/provider.dart';
 
 class LoginContainer extends StatelessWidget {
-  const LoginContainer({super.key});
+  LoginContainer({super.key});
+
+  //Text-field-controllers
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
+  final firstNameController = TextEditingController();
+  final lastNameController = TextEditingController();
+  final confirmPasswordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -70,7 +82,7 @@ class LoginContainer extends StatelessWidget {
                               width: 200,
                               child: LoginTextField(
                                 hintText: 'First Name',
-                                textEditingController: TextEditingController(),
+                                textEditingController: firstNameController,
                               ),
                             ),
                             SizedBox(width: 50),
@@ -78,7 +90,7 @@ class LoginContainer extends StatelessWidget {
                               width: 200,
                               child: LoginTextField(
                                 hintText: 'LastName',
-                                textEditingController: TextEditingController(),
+                                textEditingController: lastNameController,
                               ),
                             ),
                           ],
@@ -91,7 +103,7 @@ class LoginContainer extends StatelessWidget {
                       width: 450,
                       child: LoginTextField(
                         hintText: 'Email',
-                        textEditingController: TextEditingController(),
+                        textEditingController: emailController,
                       ),
                     ),
                     const SizedBox(height: 20),
@@ -99,7 +111,7 @@ class LoginContainer extends StatelessWidget {
                       width: 450,
                       child: LoginTextField(
                         hintText: "Password",
-                        textEditingController: TextEditingController(),
+                        textEditingController: passwordController,
                         obscureText: true,
                       ),
                     ),
@@ -109,7 +121,7 @@ class LoginContainer extends StatelessWidget {
                           width: 450,
                           child: LoginTextField(
                             hintText: "Confirm Password",
-                            textEditingController: TextEditingController(),
+                            textEditingController: confirmPasswordController,
                             obscureText: true,
                           ),
                         )
@@ -118,7 +130,13 @@ class LoginContainer extends StatelessWidget {
                     const SizedBox(height: 30),
 
                     //Authentication-Button
-                    const LoginButton(),
+                    LoginButton(
+                      emailController: emailController,
+                      passwordController: passwordController,
+                      firstNameController: firstNameController,
+                      lastNameController: lastNameController,
+                      confirmPasswordController: confirmPasswordController,
+                    ),
                     const SizedBox(height: 10),
 
                     //SignIn-SignUp-Button
@@ -206,13 +224,36 @@ class SignInSignUpButton extends StatelessWidget {
 
 //User-Authentication Button
 class LoginButton extends StatelessWidget {
-  const LoginButton({super.key});
+  const LoginButton({
+    super.key,
+    required this.emailController,
+    required this.passwordController,
+    required this.firstNameController,
+    required this.lastNameController,
+    required this.confirmPasswordController,
+  });
+
+  //Text-field-controllers
+  final TextEditingController emailController;
+  final TextEditingController passwordController;
+  final TextEditingController firstNameController;
+  final TextEditingController lastNameController;
+  final TextEditingController confirmPasswordController;
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {
-        
+      onTap: () async {
+        final LoginState loginMode =
+            context.read<Loginprovider>().getLoginMode();
+
+        //Signin-State
+        if (loginMode == LoginState.signIn) {
+          await _validateUserSignIn(context);
+        } else {
+          //SignUp-state
+          await _validateUserSignUp(context);
+        }
       },
       child: Container(
         width: 450,
@@ -241,5 +282,80 @@ class LoginButton extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Future<void> _validateUserSignUp(BuildContext context) async {
+    final userModel = UserModel(
+      firstName: firstNameController.text,
+      email: emailController.text,
+      password: passwordController.text,
+      joinDate: "",
+    );
+    final validationStatus = AuthenticationServices.instance
+        .validateSignUpCredentials(
+          userModel: userModel,
+          confirmPassword: confirmPasswordController.text,
+        );
+    if (validationStatus.isEmpty) {
+      //Signup-validation-success
+      final signUpStatus = await AuthenticationServices.instance.signUpUser(
+        userModel: userModel,
+      );
+
+      if (signUpStatus) {
+        //Signup-Success
+        Navigator.pushNamed(context, HomeScreen.routeName);
+      } else {
+        //Signup-Failed
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text("OOPS! ,Something went wrong!"),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    } else {
+      //Signup-validation-failed
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(validationStatus), backgroundColor: Colors.red),
+      );
+    }
+  }
+
+  Future<void> _validateUserSignIn(BuildContext context) async {
+    final validationStatus = AuthenticationServices.instance
+        .validateSignInCredentials(
+          email: emailController.text,
+          password: passwordController.text,
+        );
+
+    if (validationStatus.isEmpty || validationStatus == "") {
+      //Signin-validation-success
+      final userModel = await AuthenticationServices.instance.signInUser(
+        email: "",
+        password: "",
+      );
+      if (userModel != null) {
+        //Sign-In-Success
+        Navigator.pushNamed(context, HomeScreen.routeName);
+      } else {
+        //Sign-in-failed
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text("OOPS! ,Something went wrong!"),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    } else {
+      //Signin-Validation-failed
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(validationStatus),
+          backgroundColor: Colors.red,
+          elevation: 10,
+        ),
+      );
+    }
   }
 }

@@ -39,7 +39,13 @@ class AuthenticationServices {
     return "";
   }
 
-  String validateSignInCredentials({required String email}) {
+  String validateSignInCredentials({
+    required String email,
+    required String password,
+  }) {
+    if (email.isEmpty || password.isEmpty) {
+      return "All fields are required";
+    }
     final emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
     if (!emailRegex.hasMatch(email)) {
       return 'Invalid email format.';
