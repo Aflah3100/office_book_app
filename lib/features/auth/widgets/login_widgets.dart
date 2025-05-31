@@ -140,7 +140,13 @@ class LoginContainer extends StatelessWidget {
                     const SizedBox(height: 10),
 
                     //SignIn-SignUp-Button
-                    const SignInSignUpButton(),
+                    SignInSignUpButton(
+                      emailController: emailController,
+                      passwordController: passwordController,
+                      firstNameController: firstNameController,
+                      lastNameController: lastNameController,
+                      confirmPasswordController: confirmPasswordController,
+                    ),
                   ],
                 );
               },
@@ -189,8 +195,21 @@ class LoginTextField extends StatelessWidget {
 
 //SignIn/SignUp Button
 class SignInSignUpButton extends StatelessWidget {
-  const SignInSignUpButton({super.key});
+  const SignInSignUpButton({
+    super.key,
+    required this.emailController,
+    required this.passwordController,
+    required this.firstNameController,
+    required this.lastNameController,
+    required this.confirmPasswordController,
+  });
 
+  //Text-field-controllers
+  final TextEditingController emailController;
+  final TextEditingController passwordController;
+  final TextEditingController firstNameController;
+  final TextEditingController lastNameController;
+  final TextEditingController confirmPasswordController;
   @override
   Widget build(BuildContext context) {
     return TextButton(
@@ -203,6 +222,13 @@ class SignInSignUpButton extends StatelessWidget {
                   ? LoginState.signUp
                   : LoginState.signIn,
         );
+
+        //Clear-controllers
+        emailController.clear();
+        passwordController.clear();
+        firstNameController.clear();
+        lastNameController.clear();
+        confirmPasswordController.clear();
       },
       child: Consumer<Loginprovider>(
         builder: (ctx, loginProvider, _) {
@@ -334,8 +360,8 @@ class LoginButton extends StatelessWidget {
     if (validationStatus.isEmpty || validationStatus == "") {
       //Signin-validation-success
       final userModel = await AuthenticationServices.instance.signInUser(
-        email: "",
-        password: "",
+        email: emailController.text,
+        password: passwordController.text,
       );
       if (userModel != null) {
         //Sign-In-Success
@@ -344,7 +370,7 @@ class LoginButton extends StatelessWidget {
         //Sign-in-failed
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text("OOPS! ,Something went wrong!"),
+            content: Text("Invalid Login Credentials!"),
             backgroundColor: Colors.red,
           ),
         );

@@ -15,6 +15,10 @@ class AuthenticationServices {
     required UserModel userModel,
     required String confirmPassword,
   }) {
+    //Check is user already Exists
+    if (HiveUserServices.instance.checkUserExists(email: userModel.email)) {
+      return "User Already Exists!";
+    }
     // Check if fields are empty
     if (userModel.firstName.trim().isEmpty ||
         userModel.email.trim().isEmpty ||
@@ -35,7 +39,8 @@ class AuthenticationServices {
     }
 
     // Confirm password check
-    if (userModel.password != confirmPassword) {
+    if (userModel.password !=
+        AuthenticationServices.instance.hashPassword(confirmPassword)) {
       return 'Passwords do not match.';
     }
 
@@ -58,9 +63,9 @@ class AuthenticationServices {
   }
 
   String hashPassword(String password) {
-  final bytes = utf8.encode(password);
-  final digest = sha256.convert(bytes);
-  return digest.toString();
+    final bytes = utf8.encode(password);
+    final digest = sha256.convert(bytes);
+    return digest.toString();
   }
 
   //SignUp user
@@ -73,14 +78,14 @@ class AuthenticationServices {
     required String email,
     required String password,
   }) async {
-    final userModel= await HiveUserServices.instance.fetchUser(email: email);
+    final userModel = await HiveUserServices.instance.fetchUser(email: email);
 
-    if(userModel!=null){
+    if (userModel != null) {
       //Check-password
-      if(userModel.password==hashPassword(password)){
+      if (userModel.password == hashPassword(password)) {
         //Signin-Success
         return userModel;
-      }else{
+      } else {
         return null;
       }
     }

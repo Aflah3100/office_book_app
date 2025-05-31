@@ -2,10 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:office_book_app/core/app_colors.dart';
 import 'package:office_book_app/features/auth/screens/login_screen.dart';
 import 'package:office_book_app/features/home/screens/home_screen.dart';
+import 'package:office_book_app/shared/hive_database/services/hive_initializer.dart';
 import 'package:office_book_app/shared/providers/login_provider.dart';
+import 'package:office_book_app/shared/router/generate_route.dart';
 import 'package:provider/provider.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await HiveInitializer.instance.initHive();
   runApp(const MyApp());
 }
 
@@ -23,6 +28,7 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           colorScheme: ColorScheme.fromSeed(seedColor: AppColors.primaryOrange),
         ),
+        onGenerateRoute: generateRoute,
         home: LoginScreen(),
       ),
     );
