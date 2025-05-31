@@ -1,4 +1,7 @@
 //Signin-Signup Services Class
+import 'dart:convert';
+
+import 'package:crypto/crypto.dart';
 import 'package:office_book_app/shared/hive_database/models/user_model.dart';
 import 'package:office_book_app/shared/hive_database/services/hive_user_services.dart';
 
@@ -39,6 +42,7 @@ class AuthenticationServices {
     return "";
   }
 
+  //Validate-SignIn-Credentials
   String validateSignInCredentials({
     required String email,
     required String password,
@@ -53,6 +57,12 @@ class AuthenticationServices {
     return "";
   }
 
+  String hashPassword(String password) {
+  final bytes = utf8.encode(password);
+  final digest = sha256.convert(bytes);
+  return digest.toString();
+  }
+
   //SignUp user
   Future<bool> signUpUser({required UserModel userModel}) async {
     return await HiveUserServices.instance.addUser(userModel: userModel);
@@ -63,6 +73,18 @@ class AuthenticationServices {
     required String email,
     required String password,
   }) async {
-    return await HiveUserServices.instance.fetchUser(email: email);
+    final userModel= await HiveUserServices.instance.fetchUser(email: email);
+
+    if(userModel!=null){
+      //Check-password
+      if(userModel.password==hashPassword(password)){
+        //Signin-Success
+        return userModel;
+      }else{
+        return null;
+      }
+    }
+
+    return userModel;
   }
 }

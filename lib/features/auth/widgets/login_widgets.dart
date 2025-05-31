@@ -288,7 +288,9 @@ class LoginButton extends StatelessWidget {
     final userModel = UserModel(
       firstName: firstNameController.text,
       email: emailController.text,
-      password: passwordController.text,
+      password: AuthenticationServices.instance.hashPassword(
+        passwordController.text,
+      ),
       joinDate: "",
     );
     final validationStatus = AuthenticationServices.instance
