@@ -26,8 +26,8 @@ class SharedPrefs {
   }
 
   // delete user model from shared pref
-  Future<void> deleteLoggedUser() async {
+  Future<bool> deleteLoggedUser() async {
     final sharedPrefObject = await SharedPreferences.getInstance();
-    sharedPrefObject.remove(_userModelKey);
+    return await sharedPrefObject.remove(_userModelKey);
   }
 }
