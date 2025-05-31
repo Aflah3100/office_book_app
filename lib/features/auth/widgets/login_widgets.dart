@@ -34,16 +34,18 @@ class LoginContainer extends StatelessWidget {
             ),
             const SizedBox(height: 10),
             Consumer<Loginprovider>(
-              builder: (ctx,provider,_) {
+              builder: (ctx, provider, _) {
                 return Text(
-                  (provider.getLoginMode()==LoginState.signUp)?'Welcome In':"Welcome Back",
+                  (provider.getLoginMode() == LoginState.signUp)
+                      ? 'Welcome In'
+                      : "Welcome Back",
                   style: GoogleFonts.publicSans(
                     fontSize: 30,
                     fontWeight: FontWeight.w700,
                     color: AppColors.primaryOrangeLight,
                   ),
                 );
-              }
+              },
             ),
             Text(
               'Organize Your Work Day',
@@ -209,7 +211,9 @@ class LoginButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {},
+      onTap: () {
+        
+      },
       child: Container(
         width: 450,
         height: 48,

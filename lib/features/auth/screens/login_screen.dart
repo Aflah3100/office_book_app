@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:office_book_app/core/app_assets.dart';
 import 'package:office_book_app/core/app_colors.dart';
-import 'package:office_book_app/features/auth/Linux/widgets/login_widgets.dart';
+import 'package:office_book_app/features/auth/widgets/login_widgets.dart';
+import 'package:office_book_app/shared/router/route_constants.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
+  static const routeName=RouteConstants.loginScreenLinux;
 
   @override
   Widget build(BuildContext context) {
