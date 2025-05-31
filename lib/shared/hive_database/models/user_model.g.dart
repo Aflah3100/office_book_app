@@ -6,17 +6,17 @@ part of 'user_model.dart';
 // TypeAdapterGenerator
 // **************************************************************************
 
-class UserModelAdapter extends TypeAdapter<UserModel> {
+class UserModelAdapter extends TypeAdapter<HiveUserModel> {
   @override
   final int typeId = 0;
 
   @override
-  UserModel read(BinaryReader reader) {
+  HiveUserModel read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return UserModel(
+    return HiveUserModel(
       firstName: fields[1] as String,
       lastName: fields[2] as String?,
       email: fields[3] as String,
@@ -26,7 +26,7 @@ class UserModelAdapter extends TypeAdapter<UserModel> {
   }
 
   @override
-  void write(BinaryWriter writer, UserModel obj) {
+  void write(BinaryWriter writer, HiveUserModel obj) {
     writer
       ..writeByte(5)
       ..writeByte(1)

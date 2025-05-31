@@ -12,7 +12,7 @@ class AuthenticationServices {
 
   //Validate Sign up credentials
   String validateSignUpCredentials({
-    required UserModel userModel,
+    required HiveUserModel userModel,
     required String confirmPassword,
   }) {
     //Check is user already Exists
@@ -62,6 +62,7 @@ class AuthenticationServices {
     return "";
   }
 
+  //Encypt-password
   String hashPassword(String password) {
     final bytes = utf8.encode(password);
     final digest = sha256.convert(bytes);
@@ -69,12 +70,12 @@ class AuthenticationServices {
   }
 
   //SignUp user
-  Future<bool> signUpUser({required UserModel userModel}) async {
+  Future<bool> signUpUser({required HiveUserModel userModel}) async {
     return await HiveUserServices.instance.addUser(userModel: userModel);
   }
 
   //SignIn User
-  Future<UserModel?> signInUser({
+  Future<HiveUserModel?> signInUser({
     required String email,
     required String password,
   }) async {

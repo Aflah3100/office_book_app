@@ -5,7 +5,7 @@ import 'package:hive/hive.dart';
 part 'user_model.g.dart';
 
 @HiveType(typeId: 0)
-class UserModel extends HiveObject{
+class HiveUserModel extends HiveObject {
   @HiveField(1)
   String firstName;
 
@@ -21,7 +21,7 @@ class UserModel extends HiveObject{
   @HiveField(5)
   String joinDate;
 
-  UserModel({
+  HiveUserModel({
     required this.firstName,
     this.lastName,
     required this.email,

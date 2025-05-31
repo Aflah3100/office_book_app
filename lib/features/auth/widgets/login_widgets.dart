@@ -1,5 +1,4 @@
 // ignore_for_file: use_build_context_synchronously
-
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:office_book_app/core/app_assets.dart';
@@ -7,8 +6,10 @@ import 'package:office_book_app/core/app_colors.dart';
 import 'package:office_book_app/core/app_enums.dart';
 import 'package:office_book_app/features/home/screens/home_screen.dart';
 import 'package:office_book_app/shared/hive_database/models/user_model.dart';
+import 'package:office_book_app/shared/models/user_model.dart';
 import 'package:office_book_app/shared/providers/login_provider.dart';
 import 'package:office_book_app/shared/services/authentication_services.dart';
+import 'package:office_book_app/shared/services/shared_prefs.dart';
 import 'package:provider/provider.dart';
 
 class LoginContainer extends StatelessWidget {
@@ -311,8 +312,9 @@ class LoginButton extends StatelessWidget {
   }
 
   Future<void> _validateUserSignUp(BuildContext context) async {
-    final userModel = UserModel(
+    final userModel = HiveUserModel(
       firstName: firstNameController.text,
+      lastName: lastNameController.text,
       email: emailController.text,
       password: AuthenticationServices.instance.hashPassword(
         passwordController.text,
@@ -332,7 +334,27 @@ class LoginButton extends StatelessWidget {
 
       if (signUpStatus) {
         //Signup-Success
-        Navigator.pushNamed(context, HomeScreen.routeName);
+
+        //Set-shared-prefs
+        final sharedPrefStatus = await SharedPrefs.instance.saveLoggedUser(
+          user: UserModel(
+            firstName: firstNameController.text,
+            lastName: lastNameController.text,
+            email: emailController.text,
+            dateOfJoin: "",
+          ),
+        );
+        if (sharedPrefStatus) {
+          //Route-to-home-screen
+          Navigator.pushNamed(context, HomeScreen.routeName);
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text("OOPS! ,Something went wrong!"),
+              backgroundColor: Colors.red,
+            ),
+          );
+        }
       } else {
         //Signup-Failed
         ScaffoldMessenger.of(context).showSnackBar(
@@ -365,7 +387,28 @@ class LoginButton extends StatelessWidget {
       );
       if (userModel != null) {
         //Sign-In-Success
-        Navigator.pushNamed(context, HomeScreen.routeName);
+
+        //Set-shared-pref
+        final sharedPrefStatus = await SharedPrefs.instance.saveLoggedUser(
+          user: UserModel(
+            firstName: userModel.firstName,
+            lastName: userModel.lastName ?? "",
+            email: userModel.email,
+            dateOfJoin: userModel.joinDate,
+          ),
+        );
+
+        if (sharedPrefStatus) {
+          //Route-to-home-screen
+          Navigator.pushNamed(context, HomeScreen.routeName);
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text("OOPS!, Something Went Wrong."),
+              backgroundColor: Colors.red,
+            ),
+          );
+        }
       } else {
         //Sign-in-failed
         ScaffoldMessenger.of(context).showSnackBar(

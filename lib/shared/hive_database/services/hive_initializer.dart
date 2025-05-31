@@ -16,8 +16,8 @@ class HiveInitializer {
     Hive.registerAdapter(UserModelAdapter());
 
     //Open-hive-boxes
-    await Hive.openBox<UserModel>(_userBox);
+    await Hive.openBox<HiveUserModel>(_userBox);
   }
 
-  Box<UserModel> get userBox => Hive.box<UserModel>(_userBox);
+  Box<HiveUserModel> get userBox => Hive.box<HiveUserModel>(_userBox);
 }
