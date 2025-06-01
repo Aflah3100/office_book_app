@@ -2,11 +2,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:office_book_app/features/auth/screens/login_screen.dart';
 import 'package:office_book_app/features/home/providers/app_bar_provider.dart';
 import 'package:office_book_app/features/home/widgets/app_bar.dart';
 import 'package:office_book_app/shared/router/route_constants.dart';
-import 'package:office_book_app/shared/services/authentication_services.dart';
 import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -62,18 +60,5 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  //Sign-out-user
-  Future<void> _signOutUser(BuildContext context) async {
-    if (await AuthenticationServices.instance.signOutUser()) {
-      Navigator.popUntil(context, (route) => false);
-      Navigator.pushNamed(context, LoginScreen.routeName);
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text("Error Logging Out User!"),
-          backgroundColor: Colors.red,
-        ),
-      );
-    }
-  }
+
 }

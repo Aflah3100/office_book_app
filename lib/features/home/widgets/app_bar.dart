@@ -1,7 +1,11 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:office_book_app/core/app_colors.dart';
 import 'package:office_book_app/core/app_enums.dart';
+import 'package:office_book_app/features/auth/screens/login_screen.dart';
 import 'package:office_book_app/features/home/providers/app_bar_provider.dart';
+import 'package:office_book_app/shared/services/authentication_services.dart';
 import 'package:office_book_app/shared/services/shared_prefs.dart';
 import 'package:provider/provider.dart';
 
@@ -123,9 +127,7 @@ class _HomeAppBarState extends State<HomeAppBar> {
                             width: 15,
                             height: 15,
                             decoration: BoxDecoration(
-                              color: _getStatusColor(
-                                provider.getUserStatus(),
-                              ), // Available (change as needed)
+                              color: _getStatusColor(provider.getUserStatus()),
                               shape: BoxShape.circle,
                               border: Border.all(color: Colors.black, width: 2),
                             ),
@@ -151,7 +153,6 @@ class _HomeAppBarState extends State<HomeAppBar> {
     final loggedUser = await SharedPrefs.instance.getLoggedUser();
 
     await showMenu(
-      // ignore: use_build_context_synchronously
       context: context,
       position: RelativeRect.fromRect(
         Rect.fromLTWH(position.dx, position.dy, 100, 100),
@@ -184,7 +185,7 @@ class _HomeAppBarState extends State<HomeAppBar> {
                             ),
                           ),
                           TextButton(
-                            onPressed: () {},
+                            onPressed: () => _signOutUser(context),
                             child: Text(
                               'Signout',
                               style: TextStyle(
@@ -234,7 +235,7 @@ class _HomeAppBarState extends State<HomeAppBar> {
                             },
                             child: Text(
                               currentUserState == UserStatus.available
-                                  ? "🟢 Available ✔ "
+                                  ? "🟢 Available ✔"
                                   : "🟢 Available",
                               style: TextStyle(color: AppColors.textPrimary),
                             ),
@@ -294,6 +295,7 @@ class _HomeAppBarState extends State<HomeAppBar> {
     );
   }
 
+  //Get-user-availability-status-color
   Color _getStatusColor(UserStatus status) {
     switch (status) {
       case UserStatus.available:
@@ -304,6 +306,21 @@ class _HomeAppBarState extends State<HomeAppBar> {
         return Colors.red;
       case UserStatus.offline:
         return Colors.grey;
+    }
+  }
+
+  //Sign-out-user
+  Future<void> _signOutUser(BuildContext context) async {
+    if (await AuthenticationServices.instance.signOutUser()) {
+      Navigator.popUntil(context, (route) => false);
+      Navigator.pushNamed(context, LoginScreen.routeName);
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Error Logging Out User!"),
+          backgroundColor: Colors.red,
+        ),
+      );
     }
   }
 }
