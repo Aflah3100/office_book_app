@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:office_book_app/core/app_colors.dart';
 import 'package:office_book_app/features/auth/screens/login_screen.dart';
@@ -8,11 +10,18 @@ import 'package:office_book_app/shared/providers/login_provider.dart';
 import 'package:office_book_app/shared/router/generate_route.dart';
 import 'package:office_book_app/shared/services/shared_prefs.dart';
 import 'package:provider/provider.dart';
+import 'package:window_size/window_size.dart' as window_size;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await HiveInitializer.instance.initHive();
+
+  //Fixing-Window-Size for linux platforms
+  if (Platform.isLinux || Platform.isWindows) {
+    const minSize = Size(1280, 720);
+    window_size.setWindowMinSize(minSize);
+  }
   runApp(const MyApp());
 }
 
