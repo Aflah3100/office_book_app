@@ -213,61 +213,74 @@ class _HomeAppBarState extends State<HomeAppBar> {
                   ),
                   Divider(),
                   //User-Status
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Set Availability Status: ',
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: AppColors.textTertiary,
-                        ),
-                      ),
-                      TextButton(
-                        onPressed: () {
-                          context.read<AppBarProvider>().setUserStatus(
-                            UserStatus.available,
-                          );
-                        },
-                        child: Text(
-                          "🟢 Available",
-                          style: TextStyle(color: AppColors.textPrimary),
-                        ),
-                      ),
-                      TextButton(
-                        onPressed: () {
-                          context.read<AppBarProvider>().setUserStatus(
-                            UserStatus.away,
-                          );
-                        },
-                        child: Text(
-                          "🌙 Away",
-                          style: TextStyle(color: AppColors.textPrimary),
-                        ),
-                      ),
-                      TextButton(
-                        onPressed: () {
-                          context.read<AppBarProvider>().setUserStatus(
-                            UserStatus.busy,
-                          );
-                        },
-                        child: Text(
-                          "🔴 Busy",
-                          style: TextStyle(color: AppColors.textPrimary),
-                        ),
-                      ),
-                      TextButton(
-                        onPressed: () {
-                          context.read<AppBarProvider>().setUserStatus(
-                            UserStatus.offline,
-                          );
-                        },
-                        child: Text(
-                          "⚫ Offline",
-                          style: TextStyle(color: AppColors.textPrimary),
-                        ),
-                      ),
-                    ],
+                  Consumer<AppBarProvider>(
+                    builder: (ctx, provider, _) {
+                      final currentUserState = provider.getUserStatus();
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Set Availability Status: ',
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: AppColors.textTertiary,
+                            ),
+                          ),
+                          TextButton(
+                            onPressed: () {
+                              context.read<AppBarProvider>().setUserStatus(
+                                UserStatus.available,
+                              );
+                            },
+                            child: Text(
+                              currentUserState == UserStatus.available
+                                  ? "🟢 Available ✔ "
+                                  : "🟢 Available",
+                              style: TextStyle(color: AppColors.textPrimary),
+                            ),
+                          ),
+                          TextButton(
+                            onPressed: () {
+                              context.read<AppBarProvider>().setUserStatus(
+                                UserStatus.away,
+                              );
+                            },
+                            child: Text(
+                              currentUserState == UserStatus.away
+                                  ? "🌙 Away ✔"
+                                  : "🌙 Away",
+                              style: TextStyle(color: AppColors.textPrimary),
+                            ),
+                          ),
+                          TextButton(
+                            onPressed: () {
+                              context.read<AppBarProvider>().setUserStatus(
+                                UserStatus.busy,
+                              );
+                            },
+                            child: Text(
+                              currentUserState == UserStatus.busy
+                                  ? "🔴 Busy ✔ "
+                                  : "🔴 Busy",
+                              style: TextStyle(color: AppColors.textPrimary),
+                            ),
+                          ),
+                          TextButton(
+                            onPressed: () {
+                              context.read<AppBarProvider>().setUserStatus(
+                                UserStatus.offline,
+                              );
+                            },
+                            child: Text(
+                              currentUserState == UserStatus.offline
+                                  ? "⚫ Offline ✔"
+                                  : "⚫ Offline",
+                              style: TextStyle(color: AppColors.textPrimary),
+                            ),
+                          ),
+                        ],
+                      );
+                    },
                   ),
                 ],
               ),
