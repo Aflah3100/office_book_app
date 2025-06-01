@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:office_book_app/core/app_colors.dart';
 import 'package:office_book_app/features/auth/screens/login_screen.dart';
+import 'package:office_book_app/features/home/providers/app_bar_provider.dart';
 import 'package:office_book_app/features/home/screens/home_screen.dart';
 import 'package:office_book_app/shared/hive_database/services/hive_initializer.dart';
 import 'package:office_book_app/shared/models/user_model.dart';
@@ -32,7 +33,10 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
-      providers: [ChangeNotifierProvider(create: (_) => Loginprovider())],
+      providers: [
+        ChangeNotifierProvider(create: (_) => Loginprovider()),
+        ChangeNotifierProvider(create: (_) => AppBarProvider()),
+      ],
       child: MaterialApp(
         title: 'Office Book',
         debugShowCheckedModeBanner: false,
