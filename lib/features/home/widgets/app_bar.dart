@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:office_book_app/core/app_colors.dart';
 import 'package:office_book_app/core/app_enums.dart';
+import 'package:office_book_app/features/auth/screens/lock_screen.dart';
 import 'package:office_book_app/features/auth/screens/login_screen.dart';
 import 'package:office_book_app/features/home/providers/app_bar_provider.dart';
 import 'package:office_book_app/shared/services/authentication_services.dart';
@@ -47,7 +48,7 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
                 child: SizedBox(
                   height: 40,
                   child: TextField(
-                  style: const TextStyle(color: Colors.white),
+                    style: const TextStyle(color: Colors.white),
                     decoration: InputDecoration(
                       filled: true,
                       fillColor: const Color(0xFF1F1F1F),
@@ -144,7 +145,12 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
                             ),
                           ),
                           TextButton(
-                            onPressed: () => _signOutUser(context),
+                            onPressed:
+                                () => Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (_) => LockScreen(),
+                                  ),
+                                ),
                             child: Text(
                               'Signout',
                               style: TextStyle(

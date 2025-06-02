@@ -1,11 +1,8 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:office_book_app/features/home/providers/app_bar_provider.dart';
 import 'package:office_book_app/features/home/widgets/app_bar.dart';
 import 'package:office_book_app/shared/router/route_constants.dart';
-import 'package:provider/provider.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
