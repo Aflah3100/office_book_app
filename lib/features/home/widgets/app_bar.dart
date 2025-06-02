@@ -9,35 +9,10 @@ import 'package:office_book_app/shared/services/authentication_services.dart';
 import 'package:office_book_app/shared/services/shared_prefs.dart';
 import 'package:provider/provider.dart';
 
-class HomeAppBar extends StatefulWidget implements PreferredSizeWidget {
+class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
   const HomeAppBar({super.key});
   @override
   Size get preferredSize => const Size.fromHeight(60);
-  @override
-  State<HomeAppBar> createState() => _HomeAppBarState();
-}
-
-class _HomeAppBarState extends State<HomeAppBar> {
-  final _searchFocusNode = FocusNode();
-  final _searchFieldController = TextEditingController();
-
-  @override
-  void initState() {
-    _searchFocusNode.addListener(() {
-      if (!_searchFocusNode.hasFocus) {
-        context.read<AppBarProvider>().setShowSearch(false);
-      }
-    });
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    _searchFocusNode.dispose();
-    _searchFieldController.dispose();
-    super.dispose();
-  }
-
   @override
   Widget build(BuildContext context) {
     return AppBar(
@@ -50,7 +25,7 @@ class _HomeAppBarState extends State<HomeAppBar> {
         padding: const EdgeInsets.symmetric(horizontal: 10.0),
         child: SizedBox(
           width: double.maxFinite,
-          height: widget.preferredSize.height,
+          height: preferredSize.height,
 
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -71,38 +46,22 @@ class _HomeAppBarState extends State<HomeAppBar> {
                 flex: 3,
                 child: SizedBox(
                   height: 40,
-                  child: Consumer<AppBarProvider>(
-                    builder: (ctx, provider, _) {
-                      if (provider.getShowSearch()) {
-                        WidgetsBinding.instance.addPostFrameCallback((_) {
-                          if (!_searchFocusNode.hasFocus) {
-                            _searchFocusNode.requestFocus();
-                          }
-                        });
-                      }
-                      return TextField(
-                        focusNode: _searchFocusNode,
-                        controller: _searchFieldController,
-                        style: const TextStyle(color: Colors.white),
-                        decoration: InputDecoration(
-                          filled: true,
-                          fillColor: const Color(0xFF1F1F1F),
-                          hintText: 'Set Status',
-                          hintStyle: const TextStyle(color: Color(0xFFB3B3B3)),
-                          contentPadding: const EdgeInsets.symmetric(
-                            horizontal: 16,
-                          ),
-                          prefixIcon: const Icon(
-                            Icons.search,
-                            color: Colors.white,
-                          ),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
-                            borderSide: BorderSide.none,
-                          ),
-                        ),
-                      );
-                    },
+                  child: TextField(
+                  style: const TextStyle(color: Colors.white),
+                    decoration: InputDecoration(
+                      filled: true,
+                      fillColor: const Color(0xFF1F1F1F),
+                      hintText: 'Set Status',
+                      hintStyle: const TextStyle(color: Color(0xFFB3B3B3)),
+                      contentPadding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                      ),
+                      prefixIcon: const Icon(Icons.search, color: Colors.white),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        borderSide: BorderSide.none,
+                      ),
+                    ),
                   ),
                 ),
               ),

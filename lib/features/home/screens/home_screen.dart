@@ -7,58 +7,28 @@ import 'package:office_book_app/features/home/widgets/app_bar.dart';
 import 'package:office_book_app/shared/router/route_constants.dart';
 import 'package:provider/provider.dart';
 
-class HomeScreen extends StatefulWidget {
+class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
   static const routeName = RouteConstants.homeScreenLinux;
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
-}
-
-class _HomeScreenState extends State<HomeScreen> {
-  //Searchbar-focus-node
-  final FocusNode _searchBarFocusNode = FocusNode();
-
-  @override
-  void initState() {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _searchBarFocusNode.requestFocus();
-    });
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return KeyboardListener(
-      focusNode: _searchBarFocusNode,
-      onKeyEvent: (event) {
-        if (event.logicalKey == LogicalKeyboardKey.slash) {
-          context.read<AppBarProvider>().setShowSearch(true);
-        }
-      },
-      child: Scaffold(
-        appBar: HomeAppBar(),
+    return Scaffold(
+      appBar: HomeAppBar(),
 
-        body: SafeArea(
-          child:
-          //Base-Container
-          Container(
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [
-                  Color(0xFF1E1E1E),
-                  Color(0xFF2C2C2C),
-                  Color(0xFF3A3A3A),
-                ],
-              ),
+      body: SafeArea(
+        child:
+        //Base-Container
+        Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [Color(0xFF1E1E1E), Color(0xFF2C2C2C), Color(0xFF3A3A3A)],
             ),
           ),
         ),
       ),
     );
   }
-
-
 }
