@@ -74,7 +74,7 @@ class LockScreen extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisSize: MainAxisSize.min,
-                    children: [LockScreenContainer()],
+                    children: [LockScreenWidgetsContainer()],
                   ),
                 ),
               ),
