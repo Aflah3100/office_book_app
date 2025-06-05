@@ -6,6 +6,7 @@ import 'package:office_book_app/core/app_enums.dart';
 import 'package:office_book_app/features/auth/screens/lock_screen.dart';
 import 'package:office_book_app/features/auth/screens/login_screen.dart';
 import 'package:office_book_app/features/home/providers/app_bar_provider.dart';
+import 'package:office_book_app/features/home/widgets/dynamic_search_field.dart';
 import 'package:office_book_app/shared/services/authentication_services.dart';
 import 'package:office_book_app/shared/services/shared_prefs.dart';
 import 'package:provider/provider.dart';
@@ -14,6 +15,7 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
   const HomeAppBar({super.key});
   @override
   Size get preferredSize => const Size.fromHeight(60);
+
   @override
   Widget build(BuildContext context) {
     return AppBar(
@@ -45,26 +47,7 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
               // Middle: Search bar
               Expanded(
                 flex: 3,
-                child: SizedBox(
-                  height: 40,
-                  child: TextField(
-                    style: const TextStyle(color: Colors.white),
-                    decoration: InputDecoration(
-                      filled: true,
-                      fillColor: const Color(0xFF1F1F1F),
-                      hintText: 'Set Status',
-                      hintStyle: const TextStyle(color: Color(0xFFB3B3B3)),
-                      contentPadding: const EdgeInsets.symmetric(
-                        horizontal: 16,
-                      ),
-                      prefixIcon: const Icon(Icons.search, color: Colors.white),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        borderSide: BorderSide.none,
-                      ),
-                    ),
-                  ),
-                ),
+                child: SizedBox(height: 40, child: DynamicSearchField()),
               ),
               const Spacer(),
 
@@ -145,12 +128,7 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
                             ),
                           ),
                           TextButton(
-                            onPressed:
-                                () => Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                    builder: (_) => LockScreen(),
-                                  ),
-                                ),
+                            onPressed: () => _signOutUser(context),
                             child: Text(
                               'Signout',
                               style: TextStyle(

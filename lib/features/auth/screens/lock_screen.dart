@@ -3,14 +3,17 @@ import 'package:flutter/material.dart';
 import 'package:office_book_app/core/app_assets.dart';
 import 'package:office_book_app/core/app_colors.dart';
 import 'package:office_book_app/features/auth/widgets/lock_screen_widgets.dart';
+import 'package:office_book_app/shared/router/route_constants.dart';
 
 class LockScreen extends StatelessWidget {
   LockScreen({super.key});
+
   final List<String> carouselImages = [
     AppAssets.officeBookImage1,
     AppAssets.officeBookImage2,
   ];
 
+  static const routeName = RouteConstants.LockScreenLinux;
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.sizeOf(context).width * 1;
