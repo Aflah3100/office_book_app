@@ -1,5 +1,6 @@
 //App bar Search field
 import 'package:flutter/material.dart';
+import 'package:office_book_app/core/app_colors.dart';
 import 'package:office_book_app/core/app_enums.dart';
 import 'package:office_book_app/features/auth/screens/lock_screen.dart';
 import 'package:office_book_app/features/home/providers/app_bar_provider.dart';
@@ -18,11 +19,36 @@ class _DynamicSearchFieldState extends State<DynamicSearchField> {
 
   //Command lists
   final List<Map<String, dynamic>> searchBoxCommands = [
-    {"command": "/available", "status": UserStatus.available},
-    {"command": "/away", "status": UserStatus.away},
-    {"command": "/busy", "status": UserStatus.busy},
-    {"command": "/offline", "status": UserStatus.offline},
-    {"command": "/lock", "status": UserStatus.away},
+    {
+      "command": "/available",
+      "status": UserStatus.available,
+      "message": "Set your status to available",
+    },
+    {
+      "command": "/away",
+      "status": UserStatus.away,
+      "message": "Set your status to away",
+    },
+    {
+      "command": "/busy",
+      "status": UserStatus.busy,
+      "message": "Set your status to busy",
+    },
+    {
+      "command": "/offline",
+      "status": UserStatus.offline,
+      "message": "Set your status to offline",
+    },
+    {
+      "command": "/lock",
+      "status": UserStatus.away,
+      "message": "Lock your screen (Status will be set to away)",
+    },
+    {
+      "command": "/signout",
+      "status": UserStatus.offline,
+      "message": "Signout from the application",
+    },
   ];
 
   List<Map<String, dynamic>> _filteredCommands = [];
@@ -73,6 +99,13 @@ class _DynamicSearchFieldState extends State<DynamicSearchField> {
                     title: Text(
                       cmd['command'],
                       style: TextStyle(color: Colors.white),
+                    ),
+                    trailing: Text(
+                      cmd['message'],
+                      style: TextStyle(
+                        color: AppColors.textTertiary,
+                        fontSize: 13,
+                      ),
                     ),
                     onTap: () {
                       searchFieldController.clear();
