@@ -113,8 +113,7 @@ class _DynamicSearchFieldState extends State<DynamicSearchField> {
                         cmd['status'],
                       );
                       if (cmd['command'] == '/lock') {
-                        //Lock the screen
-                        Navigator.popUntil(context, (route) => false);
+                        //Route-to-lock-screen
                         Navigator.pushNamed(context, LockScreen.routeName);
                       }
                       _removeOverlay();

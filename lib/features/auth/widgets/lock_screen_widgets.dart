@@ -4,13 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:office_book_app/core/app_assets.dart';
 import 'package:office_book_app/core/app_colors.dart';
+import 'package:office_book_app/core/app_enums.dart';
+import 'package:office_book_app/features/home/providers/app_bar_provider.dart';
+import 'package:office_book_app/features/home/screens/home_screen.dart';
 import 'package:office_book_app/shared/services/shared_prefs.dart';
+import 'package:provider/provider.dart';
 
 class LockScreenWidgetsContainer extends StatelessWidget {
-  LockScreenWidgetsContainer({super.key});
-
-  //Text-field-controllers
-  final _pinController = TextEditingController();
+  const LockScreenWidgetsContainer({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -86,10 +87,18 @@ class LockScreenWidgetsContainer extends StatelessWidget {
 
             //Pin-Text-field
             PinTextField(
-              pinController: _pinController,
               onPress: (String pin) async {
-                // await Future.delayed(Duration(milliseconds: 300));
+                await Future.delayed(Duration(milliseconds: 300));
+                //Temporary: Hardcoded pin
                 return pin == "1234";
+              },
+              onSuccess: () {
+                //Make-user-status-available
+                context.read<AppBarProvider>().setUserStatus(
+                  UserStatus.available,
+                );
+                //Route-to-home-screen
+                Navigator.popAndPushNamed(context, HomeScreen.routeName);
               },
             ),
           ],
@@ -109,12 +118,13 @@ class LockScreenWidgetsContainer extends StatelessWidget {
 class PinTextField extends StatefulWidget {
   const PinTextField({
     super.key,
-    required this.pinController,
+
     required this.onPress,
+    required this.onSuccess,
   });
 
-  final TextEditingController pinController;
   final Future<bool> Function(String pin) onPress;
+  final void Function() onSuccess;
 
   @override
   State<PinTextField> createState() => _PinTextFieldState();
@@ -125,6 +135,7 @@ class _PinTextFieldState extends State<PinTextField>
   bool isEnabled = false;
   late AnimationController _animationController;
   late Animation<double> _offsetAnimation;
+  final pinController = TextEditingController();
 
   @override
   void initState() {
@@ -147,18 +158,23 @@ class _PinTextFieldState extends State<PinTextField>
   @override
   void dispose() {
     _animationController.dispose();
+    pinController.dispose();
     super.dispose();
   }
 
   void _handleUnlock() async {
-    final pin = widget.pinController.text;
+    final pin = pinController.text;
     bool isValid = await widget.onPress(pin);
     if (!isValid) {
+      //Authentication-Invalid
       _animationController.forward();
-      widget.pinController.clear();
+      pinController.clear();
       setState(() {
         isEnabled = false;
       });
+    } else {
+      //Authentication-Success
+      widget.onSuccess();
     }
   }
 
@@ -191,10 +207,10 @@ class _PinTextFieldState extends State<PinTextField>
               child: TextFormField(
                 keyboardType: TextInputType.number,
                 obscureText: true,
-                controller: widget.pinController,
+                controller: pinController,
                 onChanged: (String pin) {
                   setState(() {
-                    isEnabled = widget.pinController.text.length >= 4;
+                    isEnabled = pinController.text.length >= 4;
                   });
                 },
                 decoration: InputDecoration(
