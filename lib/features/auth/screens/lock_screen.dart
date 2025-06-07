@@ -11,11 +11,10 @@ class LockScreen extends StatelessWidget {
 
   final List<String> carouselAnimations = [
     AppAssets.lockScreenAnimation1,
-    AppAssets.lockScreenAnimation2
 
   ];
 
-  static const routeName = RouteConstants.LockScreenLinux;
+  static const routeName = RouteConstants.lockScreenLinux;
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.sizeOf(context).width * 1;
@@ -61,7 +60,7 @@ class LockScreen extends StatelessWidget {
                   options: CarouselOptions(
                     height: screenHeight * 0.65,
                     autoPlay: true,
-                    autoPlayInterval: Duration(seconds: 3),
+                    autoPlayInterval: Duration(seconds: 100),
                     autoPlayAnimationDuration: Duration(milliseconds: 800),
                     enlargeCenterPage: true,
                     viewportFraction: 1,

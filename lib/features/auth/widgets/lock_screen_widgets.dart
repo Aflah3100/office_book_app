@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:lottie/lottie.dart';
 import 'package:office_book_app/core/app_assets.dart';
 import 'package:office_book_app/core/app_colors.dart';
 import 'package:office_book_app/core/app_enums.dart';
@@ -36,9 +37,9 @@ class LockScreenWidgetsContainer extends StatelessWidget {
             //Top-Logo
             Center(
               child: CircleAvatar(
-                backgroundColor: Colors.blue[100],
+                backgroundColor: AppColors.dividerColor,
                 radius: 40,
-                child: Image.asset(AppAssets.officeBookImage1),
+                child: Lottie.asset(AppAssets.lockAnimation),
               ),
             ),
             const SizedBox(height: 10),

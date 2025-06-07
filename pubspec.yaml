@@ -64,7 +64,7 @@ flutter:
     - assets/images/office_book_image_1.png
     - assets/images/office_book_image_2.png
     - assets/animations/lock_screen_animation_1.json
-    - assets/animations/lock_screen_animation_2.json
+    - assets/animations/lock_screen_lock_animation.json
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
   # For details regarding adding assets from package dependencies, see
