@@ -39,6 +39,7 @@ dependencies:
   hive: ^2.2.3
   hive_flutter: ^1.1.0
   hive_generator: ^2.0.1
+  lottie: ^3.3.1
   path_provider: ^2.1.5
   provider: ^6.1.5
   shared_preferences: ^2.5.3
@@ -62,6 +63,8 @@ flutter:
   assets:
     - assets/images/office_book_image_1.png
     - assets/images/office_book_image_2.png
+    - assets/animations/lock_screen_animation_1.json
+    - assets/animations/lock_screen_animation_2.json
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
   # For details regarding adding assets from package dependencies, see

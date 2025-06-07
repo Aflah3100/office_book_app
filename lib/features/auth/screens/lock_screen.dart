@@ -1,5 +1,6 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 import 'package:office_book_app/core/app_assets.dart';
 import 'package:office_book_app/core/app_colors.dart';
 import 'package:office_book_app/features/auth/widgets/lock_screen_widgets.dart';
@@ -8,9 +9,10 @@ import 'package:office_book_app/shared/router/route_constants.dart';
 class LockScreen extends StatelessWidget {
   LockScreen({super.key});
 
-  final List<String> carouselImages = [
-    AppAssets.officeBookImage1,
-    AppAssets.officeBookImage2,
+  final List<String> carouselAnimations = [
+    AppAssets.lockScreenAnimation1,
+    AppAssets.lockScreenAnimation2
+
   ];
 
   static const routeName = RouteConstants.LockScreenLinux;
@@ -43,17 +45,15 @@ class LockScreen extends StatelessWidget {
                 width: screenWidth * 0.5,
                 height: screenHeight,
                 child: CarouselSlider.builder(
-                  itemCount: carouselImages.length,
+                  itemCount: carouselAnimations.length,
                   itemBuilder: (context, index, realIndex) {
                     return Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8),
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(40),
-                        child: Image.asset(
-                          carouselImages[index],
-                          fit: BoxFit.cover,
-                          width: screenWidth * 0.35,
-                          height: screenHeight * 0.65,
+                        child: SizedBox(
+                          height: 700,
+                          child: Lottie.asset(carouselAnimations[index]),
                         ),
                       ),
                     );
