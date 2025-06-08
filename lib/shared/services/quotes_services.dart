@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:office_book_app/shared/constants/app_urls.dart';
-import 'package:office_book_app/shared/hive_database/models/quotes_model.dart';
 import 'package:http/http.dart' as http;
 
 class QuotesServices {
@@ -9,14 +8,15 @@ class QuotesServices {
   static QuotesServices instance = QuotesServices._internal();
   factory QuotesServices() => instance;
 
-  Future<QuotesModel?> fetchQuote() async {
-    final url = Uri.parse(AppUrls.programQuotesUrl);
+  Future<String?> fetchtodaysQuote() async {
+    final url = Uri.parse(AppUrls.todaysQuoteUrl);
     final response = await http.get(url);
 
     if (response.statusCode == 200) {
       //Fetch-success
-      final quoteModel = QuotesModel.fromJson(jsonDecode(response.body));
-      return quoteModel;
+      final quote = response.body;
+
+      return quote;
     }
 
     return null;

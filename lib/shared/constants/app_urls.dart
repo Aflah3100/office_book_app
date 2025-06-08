@@ -1,4 +1,4 @@
 class AppUrls {
-  static const String programQuotesUrl =
-      'https://programming-quotesapi.vercel.app/api/random';
+  static const String todaysQuoteUrl =
+      'http://numbersapi.com/6/8/date';
 }
