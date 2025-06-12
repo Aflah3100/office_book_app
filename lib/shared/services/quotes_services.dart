@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:office_book_app/core/app_enums.dart';
+import 'package:office_book_app/features/home/utils/home_screen_utils.dart';
 import 'package:office_book_app/shared/constants/app_urls.dart';
 import 'package:http/http.dart' as http;
 
@@ -9,7 +11,9 @@ class QuotesServices {
   factory QuotesServices() => instance;
 
   Future<String?> fetchtodaysQuote() async {
-    final url = Uri.parse(AppUrls.todaysQuoteUrl);
+    final month = HomeScreenUtilFunctions.getFormattedDate(DateType.month);
+    final day = HomeScreenUtilFunctions.getFormattedDate(DateType.day);
+    final url = Uri.parse("${AppUrls.todaysQuoteUrl}/$month/$day/date");
     final response = await http.get(url);
 
     if (response.statusCode == 200) {
