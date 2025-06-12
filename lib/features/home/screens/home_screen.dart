@@ -1,7 +1,10 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:lottie/lottie.dart';
+import 'package:office_book_app/core/app_assets.dart';
 import 'package:office_book_app/core/app_colors.dart';
 import 'package:office_book_app/features/home/utils/home_screen_utils.dart';
 import 'package:office_book_app/features/home/widgets/app_bar.dart';
@@ -11,8 +14,13 @@ import 'package:office_book_app/shared/services/quotes_services.dart';
 import 'package:office_book_app/shared/services/shared_prefs.dart';
 
 class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
+  HomeScreen({super.key});
   static const routeName = RouteConstants.homeScreenLinux;
+
+  final List<String> officeDeskAnimations = [
+    // AppAssets.officeDeskAnimation1,
+    AppAssets.officeDeskAnimation2,
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +59,39 @@ class HomeScreen extends StatelessWidget {
                       //Left-side-animation-container
                       child: Row(
                         children: [
-                          Container(width: screenWidth * 0.25),
+                          Container(
+                            width: screenWidth * 0.25,
+                            child: CarouselSlider.builder(
+                              itemCount: officeDeskAnimations.length,
+                              itemBuilder: (context, index, realIndex) {
+                                return Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 8,
+                                  ),
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(40),
+                                    child: SizedBox(
+                                      height: 700,
+                                      child: Lottie.asset(
+                                        officeDeskAnimations[index],
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              },
+                              options: CarouselOptions(
+                                height: screenHeight * 0.65,
+                                autoPlay: true,
+                                autoPlayInterval: Duration(seconds: 100),
+                                autoPlayAnimationDuration: Duration(
+                                  milliseconds: 800,
+                                ),
+                                enlargeCenterPage: true,
+                                viewportFraction: 1,
+                                scrollDirection: Axis.horizontal,
+                              ),
+                            ),
+                          ),
 
                           //Right-side-quotes-container
                           Expanded(

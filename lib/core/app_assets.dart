@@ -5,4 +5,8 @@ class AppAssets {
       'assets/animations/lock_screen_animation_1.json';
   static const lockAnimation =
       'assets/animations/lock_screen_lock_animation.json';
+  static const officeDeskAnimation1 =
+      'assets/animations/office_desk_animation_1.json';
+  static const officeDeskAnimation2 =
+      'assets/animations/office_desk_animation_2.json';
 }
