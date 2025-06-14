@@ -5,8 +5,10 @@ class UserModel {
   final String? lastName;
   final String email;
   final String dateOfJoin;
+  final String userId;
 
   UserModel({
+    required this.userId,
     required this.firstName,
     required this.lastName,
     required this.email,
@@ -18,9 +20,11 @@ class UserModel {
     "lastName": lastName ?? "",
     "email": email,
     "dateOfJoin": dateOfJoin,
+    "userId":userId
   };
 
   factory UserModel.fromMap(Map<String, dynamic> userMap) => UserModel(
+    userId: userMap['userId'],
     firstName: userMap["firstName"],
     lastName: userMap["lastName"],
     email: userMap["email"],

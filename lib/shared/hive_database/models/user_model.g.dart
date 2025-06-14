@@ -6,7 +6,7 @@ part of 'user_model.dart';
 // TypeAdapterGenerator
 // **************************************************************************
 
-class UserModelAdapter extends TypeAdapter<HiveUserModel> {
+class HiveUserModelAdapter extends TypeAdapter<HiveUserModel> {
   @override
   final int typeId = 0;
 
@@ -17,6 +17,7 @@ class UserModelAdapter extends TypeAdapter<HiveUserModel> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return HiveUserModel(
+      userId: fields[0] as String,
       firstName: fields[1] as String,
       lastName: fields[2] as String?,
       email: fields[3] as String,
@@ -28,7 +29,9 @@ class UserModelAdapter extends TypeAdapter<HiveUserModel> {
   @override
   void write(BinaryWriter writer, HiveUserModel obj) {
     writer
-      ..writeByte(5)
+      ..writeByte(6)
+      ..writeByte(0)
+      ..write(obj.userId)
       ..writeByte(1)
       ..write(obj.firstName)
       ..writeByte(2)
@@ -47,7 +50,7 @@ class UserModelAdapter extends TypeAdapter<HiveUserModel> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is UserModelAdapter &&
+      other is HiveUserModelAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }

@@ -70,6 +70,11 @@ class AuthenticationServices {
     return digest.toString();
   }
 
+  //Generate-enrypted-userid
+  String generateUserId(String email) {
+    return sha256.convert(utf8.encode(email.toLowerCase().trim())).toString();
+  }
+
   //SignUp user
   Future<bool> signUpUser({required HiveUserModel userModel}) async {
     return await HiveUserServices.instance.addUser(userModel: userModel);

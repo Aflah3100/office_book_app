@@ -13,7 +13,7 @@ class HiveInitializer {
     await Hive.initFlutter();
 
     //Register-Adapters
-    Hive.registerAdapter(UserModelAdapter());
+    Hive.registerAdapter(HiveUserModelAdapter());
 
     //Open-hive-boxes
     await Hive.openBox<HiveUserModel>(_userBox);

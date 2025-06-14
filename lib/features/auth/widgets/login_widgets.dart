@@ -313,6 +313,7 @@ class LoginButton extends StatelessWidget {
 
   Future<void> _validateUserSignUp(BuildContext context) async {
     final userModel = HiveUserModel(
+      userId: AuthenticationServices.instance.generateUserId(emailController.text),
       firstName: firstNameController.text,
       lastName: lastNameController.text,
       email: emailController.text,
@@ -338,10 +339,11 @@ class LoginButton extends StatelessWidget {
         //Set-shared-prefs
         final sharedPrefStatus = await SharedPrefs.instance.saveLoggedUser(
           user: UserModel(
-            firstName: firstNameController.text,
-            lastName: lastNameController.text,
-            email: emailController.text,
-            dateOfJoin: "",
+            userId: userModel.userId,
+            firstName: userModel.firstName,
+            lastName: userModel.lastName??"",
+            email: userModel.email,
+            dateOfJoin: userModel.joinDate,
           ),
         );
         if (sharedPrefStatus) {
@@ -391,6 +393,7 @@ class LoginButton extends StatelessWidget {
         //Set-shared-pref
         final sharedPrefStatus = await SharedPrefs.instance.saveLoggedUser(
           user: UserModel(
+            userId: userModel.userId,
             firstName: userModel.firstName,
             lastName: userModel.lastName ?? "",
             email: userModel.email,

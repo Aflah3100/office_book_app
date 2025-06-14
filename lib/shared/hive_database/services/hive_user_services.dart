@@ -36,4 +36,9 @@ class HiveUserServices {
       return false;
     }
   }
+
+  //Dev-Enviroment-function
+  Future<void> clearAllUsers() async {
+    userBox.clear();
+  }
 }

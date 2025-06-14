@@ -92,10 +92,11 @@ class HomeScreen extends StatelessWidget {
                             // Greeting and Quotes
                             Expanded(
                               child: Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 15),
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 15,
+                                ),
                                 child: Column(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.center, 
+                                  mainAxisAlignment: MainAxisAlignment.center,
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     // Greeting
@@ -244,10 +245,13 @@ class HomeScreen extends StatelessWidget {
                                     ),
                                   ],
                                 ),
-                                SizedBox(height: 20,),
+                                SizedBox(height: 20),
                                 Padding(
                                   padding: EdgeInsets.symmetric(horizontal: 25),
-                                  child: const Divider(color: AppColors.textTertiary)),
+                                  child: const Divider(
+                                    color: AppColors.textTertiary,
+                                  ),
+                                ),
                                 const SizedBox(height: 20),
                                 Center(child: ClockInAnimatedButton()),
                               ],
@@ -268,7 +272,6 @@ class HomeScreen extends StatelessWidget {
 
   Future<String> _getUserName() async {
     final loggedUser = await SharedPrefs.instance.getLoggedUser();
-
     return "${loggedUser!.firstName.toUpperCase()} ${loggedUser.lastName?.toUpperCase() ?? ""}  ";
   }
 }
