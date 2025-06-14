@@ -90,110 +90,130 @@ class HomeScreen extends StatelessWidget {
                             ),
 
                             // Greeting and Quotes
+                            // Greeting and Quotes
                             Expanded(
                               child: Padding(
                                 padding: const EdgeInsets.symmetric(
                                   horizontal: 15,
                                 ),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    // Greeting
-                                    FittedBox(
-                                      fit: BoxFit.scaleDown,
-                                      alignment: Alignment.centerLeft,
-                                      child: ShaderMask(
-                                        shaderCallback:
-                                            (bounds) => LinearGradient(
-                                              colors: [
-                                                AppColors.primaryOrange,
-                                                AppColors.primaryOrangeLight,
-                                              ],
-                                            ).createShader(bounds),
-                                        blendMode: BlendMode.srcIn,
-                                        child: Text(
-                                          "${HomeScreenUtilFunctions.fetchGreetingMessage()},",
-                                          style: GoogleFonts.poppins(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 28,
+                                child: SingleChildScrollView(
+                                  // Keeps the column scrollable
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      // Greeting
+                                      FittedBox(
+                                        fit: BoxFit.scaleDown,
+                                        alignment: Alignment.centerLeft,
+                                        child: ShaderMask(
+                                          shaderCallback:
+                                              (bounds) => LinearGradient(
+                                                colors: [
+                                                  AppColors.primaryOrange,
+                                                  AppColors.primaryOrangeLight,
+                                                ],
+                                              ).createShader(bounds),
+                                          blendMode: BlendMode.srcIn,
+                                          child: Text(
+                                            "${HomeScreenUtilFunctions.fetchGreetingMessage()},",
+                                            style: GoogleFonts.poppins(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 28,
+                                            ),
                                           ),
                                         ),
                                       ),
-                                    ),
 
-                                    FutureBuilder<String>(
-                                      future: _getUserName(),
-                                      builder: (ctx, snapshot) {
-                                        if (snapshot.connectionState ==
-                                            ConnectionState.waiting) {
-                                          return const CircularProgressIndicator();
-                                        } else if (snapshot.hasData) {
-                                          return FittedBox(
-                                            fit: BoxFit.scaleDown,
-                                            alignment: Alignment.centerLeft,
-                                            child: ShaderMask(
-                                              shaderCallback:
-                                                  (bounds) => LinearGradient(
-                                                    colors: [
-                                                      AppColors.primaryOrange,
-                                                      AppColors
-                                                          .primaryOrangeLight,
-                                                    ],
-                                                  ).createShader(bounds),
-                                              blendMode: BlendMode.srcIn,
-                                              child: Text(
-                                                snapshot.data!,
-                                                style: GoogleFonts.publicSans(
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 30,
+                                      // User Name
+                                      FutureBuilder<String>(
+                                        future: _getUserName(),
+                                        builder: (ctx, snapshot) {
+                                          if (snapshot.connectionState ==
+                                              ConnectionState.waiting) {
+                                            // you can use a placeholder with the same height.
+                                            return const SizedBox(height: 35);
+                                          } else if (snapshot.hasData) {
+                                            return FittedBox(
+                                              fit: BoxFit.scaleDown,
+                                              alignment: Alignment.centerLeft,
+                                              child: ShaderMask(
+                                                shaderCallback:
+                                                    (bounds) => LinearGradient(
+                                                      colors: [
+                                                        AppColors.primaryOrange,
+                                                        AppColors
+                                                            .primaryOrangeLight,
+                                                      ],
+                                                    ).createShader(bounds),
+                                                blendMode: BlendMode.srcIn,
+                                                child: Text(
+                                                  snapshot.data!,
+                                                  style: GoogleFonts.publicSans(
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 30,
+                                                  ),
                                                 ),
                                               ),
-                                            ),
-                                          );
-                                        } else {
-                                          return const SizedBox.shrink();
-                                        }
-                                      },
-                                    ),
-                                    const SizedBox(height: 12),
-                                    FutureBuilder<String?>(
-                                      future:
-                                          QuotesServices.instance
-                                              .fetchtodaysQuote(),
-                                      builder: (ctx, snapshot) {
-                                        if (snapshot.connectionState ==
-                                            ConnectionState.waiting) {
-                                          return const CircularProgressIndicator(
-                                            color: AppColors.textSecondary,
-                                          );
-                                        } else if (snapshot.hasData &&
-                                            snapshot.data != null) {
-                                          return Text(
-                                            'Did You Know:\n${snapshot.data!}',
-                                            style: GoogleFonts.poppins(
-                                              fontWeight: FontWeight.w400,
-                                              fontSize: 16,
-                                              color: AppColors.iconColor,
-                                            ),
-                                            overflow: TextOverflow.ellipsis,
-                                            maxLines: 4,
-                                          );
-                                        } else {
-                                          return Text(
-                                            "",
-                                            style: GoogleFonts.poppins(
-                                              fontWeight: FontWeight.w500,
-                                              fontSize: 14,
-                                              color: AppColors.textTertiary,
-                                            ),
-                                            maxLines: 1,
-                                            overflow: TextOverflow.ellipsis,
-                                          );
-                                        }
-                                      },
-                                    ),
-                                  ],
+                                            );
+                                          } else {
+                                            return const SizedBox.shrink();
+                                          }
+                                        },
+                                      ),
+                                      const SizedBox(height: 12),
+
+                                      // Daily Quote Card
+                                      FutureBuilder<String?>(
+                                        future:
+                                            QuotesServices.instance
+                                                .fetchtodaysQuote(),
+                                        builder: (ctx, snapshot) {
+                                          if (snapshot.connectionState ==
+                                              ConnectionState.waiting) {
+                                            return const Center(
+                                              child: CircularProgressIndicator(
+                                                color: AppColors.textSecondary,
+                                              ),
+                                            );
+                                          } else if (snapshot.hasData &&
+                                              snapshot.data != null) {
+                                            return Card(
+                                              color: AppColors.cardBackground,
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(15.0),
+                                              ),
+                                              elevation: 4,
+                                              margin:
+                                                  const EdgeInsets.symmetric(
+                                                    vertical: 8.0,
+                                                  ),
+                                              child: Padding(
+                                                padding: const EdgeInsets.all(
+                                                  16.0,
+                                                ),
+                                                child: Text(
+                                                  'Did You Know:\n"${snapshot.data!}"',
+
+                                                  style: GoogleFonts.poppins(
+                                                    fontWeight: FontWeight.w400,
+                                                    fontSize: 16,
+                                                    color: AppColors.iconColor,
+                                                    fontStyle: FontStyle.italic,
+                                                  ),
+                                                ),
+                                              ),
+                                            );
+                                          } else {
+                                            // Return an empty text if there's no quote
+                                            return const Text("");
+                                          }
+                                        },
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ),
                             ),
@@ -206,55 +226,58 @@ class HomeScreen extends StatelessWidget {
                         child: Center(
                           child: Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 20),
-                            child: Column(
-                              mainAxisSize:
-                                  MainAxisSize
-                                      .min, // Shrink & center vertically
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  "Let's Focus to Work",
-                                  style: TextStyle(
-                                    color: AppColors.workspaceRed,
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-                                const SizedBox(height: 10),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      HomeScreenUtilFunctions.getFormattedDate(
-                                        DateType.all,
-                                      ),
-                                      style: TextStyle(
-                                        color: AppColors.textPrimary,
-                                        fontSize: 17,
-                                        fontWeight: FontWeight.w500,
-                                      ),
+                            child: SingleChildScrollView(
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                crossAxisAlignment: CrossAxisAlignment.stretch,
+                                children: [
+                                  Text(
+                                    "Let's Focus to Work",
+                                    style: TextStyle(
+                                      color: AppColors.workspaceRed,
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.w500,
                                     ),
-                                    Text(
-                                      "00:00:00",
-                                      style: TextStyle(
-                                        color: AppColors.workspaceGreen,
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.w500,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                SizedBox(height: 20),
-                                Padding(
-                                  padding: EdgeInsets.symmetric(horizontal: 25),
-                                  child: const Divider(
-                                    color: AppColors.textTertiary,
                                   ),
-                                ),
-                                const SizedBox(height: 20),
-                                Center(child: ClockInAnimatedButton()),
-                              ],
+                                  const SizedBox(height: 10),
+
+                                  Wrap(
+                                    alignment: WrapAlignment.spaceBetween,
+                                    runSpacing: 10.0,
+                                    children: [
+                                      Text(
+                                        HomeScreenUtilFunctions.getFormattedDate(
+                                          DateType.all,
+                                        ),
+                                        style: TextStyle(
+                                          color: AppColors.textPrimary,
+                                          fontSize: 17,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                      ),
+                                      Text(
+                                        "00:00:00",
+                                        style: TextStyle(
+                                          color: AppColors.workspaceGreen,
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(height: 20),
+                                  Padding(
+                                    padding: EdgeInsets.symmetric(
+                                      horizontal: 25,
+                                    ),
+                                    child: const Divider(
+                                      color: AppColors.textTertiary,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 20),
+                                  Center(child: ClockInAnimatedButton()),
+                                ],
+                              ),
                             ),
                           ),
                         ),
