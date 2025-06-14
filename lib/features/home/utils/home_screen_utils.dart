@@ -21,10 +21,12 @@ class HomeScreenUtilFunctions {
         return now.day.toString();
       case DateType.month:
         return now.month.toString();
+      case DateType.monthString:
+        return _getMonthName(now.month);
       case DateType.year:
         return now.year.toString();
       case DateType.all:
-        return "${now.day} ${_getMonthName(now.month)} ${now.year}";
+        return "${now.day} ${_getMonthName(now.month)}, ${_getTodayDayName()}";
     }
   }
 
@@ -45,4 +47,18 @@ class HomeScreenUtilFunctions {
     ];
     return monthNames[month - 1];
   }
+
+  static String _getTodayDayName() {
+  final now = DateTime.now();
+  const weekDays = [
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+    "Sunday",
+  ];
+  return weekDays[now.weekday - 1];
+}
 }

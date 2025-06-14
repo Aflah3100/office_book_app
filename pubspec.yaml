@@ -28,6 +28,7 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
+  animated_button: ^0.3.1
   build_runner: ^2.4.15
   carousel_slider: ^5.0.0
   crypto: ^3.0.6

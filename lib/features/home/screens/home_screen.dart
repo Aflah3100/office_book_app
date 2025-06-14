@@ -6,6 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
 import 'package:office_book_app/core/app_assets.dart';
 import 'package:office_book_app/core/app_colors.dart';
+import 'package:office_book_app/core/app_enums.dart';
 import 'package:office_book_app/features/home/utils/home_screen_utils.dart';
 import 'package:office_book_app/features/home/widgets/app_bar.dart';
 import 'package:office_book_app/shared/hive_database/models/quotes_model.dart';
@@ -18,7 +19,7 @@ class HomeScreen extends StatelessWidget {
   static const routeName = RouteConstants.homeScreenLinux;
 
   final List<String> officeDeskAnimations = [
-    // AppAssets.officeDeskAnimation1,
+    AppAssets.officeDeskAnimation1,
     AppAssets.officeDeskAnimation2,
   ];
 
@@ -45,63 +46,59 @@ class HomeScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               //Top-Container
-              Container(
-                // color: Colors.grey,
+              SizedBox(
                 width: screenWidth,
-                height: screenHeight * 0.3,
-                child: Row(
-                  children: [
-                    //Left-Side-quotes-base-Container
-                    Container(
-                      width: screenWidth * 0.7,
-                      color: Colors.transparent,
-
-                      //Left-side-animation-container
-                      child: Row(
-                        children: [
-                          Container(
-                            width: screenWidth * 0.25,
-                            child: CarouselSlider.builder(
-                              itemCount: officeDeskAnimations.length,
-                              itemBuilder: (context, index, realIndex) {
-                                return Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 8,
-                                  ),
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(40),
-                                    child: SizedBox(
-                                      height: 700,
+                height: screenHeight * 0.25,
+                child: Center(
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      // Quotes + Animation Section
+                      SizedBox(
+                        width: screenWidth * 0.75,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            // Lottie Animation
+                            SizedBox(
+                              width: screenWidth * 0.30,
+                              child: CarouselSlider.builder(
+                                itemCount: officeDeskAnimations.length,
+                                itemBuilder: (context, index, realIndex) {
+                                  return Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 10,
+                                    ),
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(40),
                                       child: Lottie.asset(
                                         officeDeskAnimations[index],
                                       ),
                                     ),
-                                  ),
-                                );
-                              },
-                              options: CarouselOptions(
-                                height: screenHeight * 0.65,
-                                autoPlay: true,
-                                autoPlayInterval: Duration(seconds: 100),
-                                autoPlayAnimationDuration: Duration(
-                                  milliseconds: 800,
+                                  );
+                                },
+                                options: CarouselOptions(
+                                  height: screenHeight * 0.25,
+                                  autoPlay: false,
+                                  enlargeCenterPage: false,
+                                  viewportFraction: 1,
+                                  scrollDirection: Axis.horizontal,
                                 ),
-                                enlargeCenterPage: true,
-                                viewportFraction: 1,
-                                scrollDirection: Axis.horizontal,
                               ),
                             ),
-                          ),
 
-                          //Right-side-quotes-container
-                          Expanded(
-                            child: LayoutBuilder(
-                              builder: (context, constraints) {
-                                return Column(
-                                  mainAxisAlignment: MainAxisAlignment.start,
+                            // Greeting and Quotes
+                            Expanded(
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 15),
+                                child: Column(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.center, 
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    // Greeting-Message
+                                    // Greeting
                                     FittedBox(
                                       fit: BoxFit.scaleDown,
                                       alignment: Alignment.centerLeft,
@@ -112,14 +109,7 @@ class HomeScreen extends StatelessWidget {
                                                 AppColors.primaryOrange,
                                                 AppColors.primaryOrangeLight,
                                               ],
-                                            ).createShader(
-                                              Rect.fromLTWH(
-                                                0,
-                                                0,
-                                                bounds.width,
-                                                bounds.height,
-                                              ),
-                                            ),
+                                            ).createShader(bounds),
                                         blendMode: BlendMode.srcIn,
                                         child: Text(
                                           "${HomeScreenUtilFunctions.fetchGreetingMessage()},",
@@ -131,7 +121,6 @@ class HomeScreen extends StatelessWidget {
                                       ),
                                     ),
 
-                                    // User-full-name-caps
                                     FutureBuilder<String>(
                                       future: _getUserName(),
                                       builder: (ctx, snapshot) {
@@ -150,21 +139,13 @@ class HomeScreen extends StatelessWidget {
                                                       AppColors
                                                           .primaryOrangeLight,
                                                     ],
-                                                  ).createShader(
-                                                    Rect.fromLTWH(
-                                                      0,
-                                                      0,
-                                                      bounds.width,
-                                                      bounds.height,
-                                                    ),
-                                                  ),
+                                                  ).createShader(bounds),
                                               blendMode: BlendMode.srcIn,
                                               child: Text(
                                                 snapshot.data!,
                                                 style: GoogleFonts.publicSans(
                                                   fontWeight: FontWeight.bold,
                                                   fontSize: 30,
-                                                  color: Colors.white,
                                                 ),
                                               ),
                                             ),
@@ -174,61 +155,108 @@ class HomeScreen extends StatelessWidget {
                                         }
                                       },
                                     ),
-
                                     const SizedBox(height: 12),
+                                    FutureBuilder<String?>(
+                                      future:
+                                          QuotesServices.instance
+                                              .fetchtodaysQuote(),
+                                      builder: (ctx, snapshot) {
+                                        if (snapshot.connectionState ==
+                                            ConnectionState.waiting) {
+                                          return const CircularProgressIndicator(
+                                            color: AppColors.textSecondary,
+                                          );
+                                        } else if (snapshot.hasData &&
+                                            snapshot.data != null) {
+                                          return Text(
+                                            'Did You Know:\n${snapshot.data!}',
+                                            style: GoogleFonts.poppins(
+                                              fontWeight: FontWeight.w400,
+                                              fontSize: 16,
+                                              color: AppColors.iconColor,
+                                            ),
+                                            overflow: TextOverflow.ellipsis,
+                                            maxLines: 4,
+                                          );
+                                        } else {
+                                          return Text(
+                                            "",
+                                            style: GoogleFonts.poppins(
+                                              fontWeight: FontWeight.w500,
+                                              fontSize: 14,
+                                              color: AppColors.textTertiary,
+                                            ),
+                                            maxLines: 1,
+                                            overflow: TextOverflow.ellipsis,
+                                          );
+                                        }
+                                      },
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
 
-                                    // Quote
-                                    Expanded(
-                                      child: FutureBuilder<String?>(
-                                        future:
-                                            QuotesServices.instance
-                                                .fetchtodaysQuote(),
-                                        builder: (ctx, snapshot) {
-                                          if (snapshot.connectionState ==
-                                              ConnectionState.waiting) {
-                                            return const CircularProgressIndicator(
-                                              color: AppColors.textSecondary,
-                                            );
-                                          } else if (snapshot.hasData &&
-                                              snapshot.data != null) {
-                                            return SizedBox(
-                                              child: Text(
-                                                'Did You Know:\n${snapshot.data!}',
-                                                style: GoogleFonts.poppins(
-                                                  fontWeight: FontWeight.w400,
-                                                  fontSize: 16,
-                                                  color: AppColors.iconColor,
-                                                ),
-                                                overflow: TextOverflow.ellipsis,
-                                                maxLines: 4,
-                                              ),
-                                            );
-                                          } else {
-                                            return Text(
-                                              "Error fetching quote...",
-                                              style: GoogleFonts.poppins(
-                                                fontWeight: FontWeight.w500,
-                                                fontSize: 14,
-                                                color: AppColors.textTertiary,
-                                              ),
-                                              maxLines: 1,
-                                              overflow: TextOverflow.ellipsis,
-                                            );
-                                          }
-                                        },
+                      // Clock-in Container
+                      Expanded(
+                        child: Center(
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 20),
+                            child: Column(
+                              mainAxisSize:
+                                  MainAxisSize
+                                      .min, // Shrink & center vertically
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "Let's Focus to Work",
+                                  style: TextStyle(
+                                    color: AppColors.workspaceRed,
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                                const SizedBox(height: 10),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      HomeScreenUtilFunctions.getFormattedDate(
+                                        DateType.all,
+                                      ),
+                                      style: TextStyle(
+                                        color: AppColors.textPrimary,
+                                        fontSize: 17,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                    Text(
+                                      "00:00:00",
+                                      style: TextStyle(
+                                        color: AppColors.workspaceGreen,
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.w500,
                                       ),
                                     ),
                                   ],
-                                );
-                              },
+                                ),
+                                SizedBox(height: 20,),
+                                Padding(
+                                  padding: EdgeInsets.symmetric(horizontal: 25),
+                                  child: const Divider(color: AppColors.textTertiary)),
+                                const SizedBox(height: 20),
+                                Center(child: ClockInAnimatedButton()),
+                              ],
                             ),
                           ),
-                        ],
+                        ),
                       ),
-                    ),
-                    //Clock-inout-container
-                    Expanded(child: Container(color: Colors.yellow)),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ],
@@ -242,5 +270,101 @@ class HomeScreen extends StatelessWidget {
     final loggedUser = await SharedPrefs.instance.getLoggedUser();
 
     return "${loggedUser!.firstName.toUpperCase()} ${loggedUser.lastName?.toUpperCase() ?? ""}  ";
+  }
+}
+
+/*
+
+Dummy enum & states , need to modify later
+
+*/
+enum ClockButtonState { clockIn, clockingIn, clockOut }
+
+class ClockInAnimatedButton extends StatefulWidget {
+  const ClockInAnimatedButton({super.key});
+
+  @override
+  State<ClockInAnimatedButton> createState() => _ClockInAnimatedButtonState();
+}
+
+class _ClockInAnimatedButtonState extends State<ClockInAnimatedButton> {
+  ClockButtonState _currentState = ClockButtonState.clockIn;
+
+  void handleTap() async {
+    if (_currentState == ClockButtonState.clockIn) {
+      setState(() {
+        _currentState = ClockButtonState.clockingIn;
+      });
+
+      // Simulate animation + processing delay
+      await Future.delayed(const Duration(seconds: 1));
+
+      setState(() {
+        _currentState = ClockButtonState.clockOut;
+      });
+    } else if (_currentState == ClockButtonState.clockOut) {
+      setState(() {
+        _currentState = ClockButtonState.clockIn;
+      });
+    }
+    // Prevent multiple taps while "clocking in" is animating
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final double width =
+        _currentState == ClockButtonState.clockOut ||
+                _currentState == ClockButtonState.clockingIn
+            ? 200
+            : 120;
+    final Color buttonColor =
+        _currentState == ClockButtonState.clockOut
+            ? AppColors.inactiveDateColor
+            : AppColors.workspaceGreen;
+    String buttonText;
+    Key textKey;
+
+    switch (_currentState) {
+      case ClockButtonState.clockIn:
+        buttonText = "Clock In";
+        textKey = const ValueKey<String>("in");
+        break;
+      case ClockButtonState.clockingIn:
+        buttonText = "Clocking In...";
+        textKey = const ValueKey<String>("clocking");
+        break;
+      case ClockButtonState.clockOut:
+        buttonText = "Clock Out";
+        textKey = const ValueKey<String>("out");
+        break;
+    }
+
+    return InkWell(
+      onTap: handleTap,
+      // Disable tap while clocking in to prevent issues
+      // You could also show a disabled cursor or visual feedback
+      canRequestFocus: _currentState != ClockButtonState.clockingIn,
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 600),
+        width: width,
+        height: 50,
+        decoration: BoxDecoration(
+          color: buttonColor,
+          borderRadius: BorderRadius.circular(10),
+        ),
+        alignment: Alignment.center,
+        child: AnimatedSwitcher(
+          duration: const Duration(milliseconds: 300),
+          transitionBuilder:
+              (child, animation) =>
+                  FadeTransition(opacity: animation, child: child),
+          child: Text(
+            buttonText,
+            key: textKey,
+            style: const TextStyle(color: Colors.white, fontSize: 16),
+          ),
+        ),
+      ),
+    );
   }
 }
