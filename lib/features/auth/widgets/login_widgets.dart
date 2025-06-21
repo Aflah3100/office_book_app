@@ -220,6 +220,8 @@
                           firstNameController: firstNameController,
                           lastNameController: lastNameController,
                           confirmPasswordController: confirmPasswordController,
+                          pinController: pinController,
+                          confirmPinController: confirmPinController,
                         ),
                         const SizedBox(height: 10),
             
@@ -230,6 +232,8 @@
                           firstNameController: firstNameController,
                           lastNameController: lastNameController,
                           confirmPasswordController: confirmPasswordController,
+                          pinController: pinController,
+                          confirmPinController: confirmPinController,
                         ),
                       ],
                     );
@@ -287,6 +291,8 @@
       required this.firstNameController,
       required this.lastNameController,
       required this.confirmPasswordController,
+      required this.pinController,
+      required this.confirmPinController
     });
 
     //Text-field-controllers
@@ -295,6 +301,8 @@
     final TextEditingController firstNameController;
     final TextEditingController lastNameController;
     final TextEditingController confirmPasswordController;
+    final TextEditingController pinController;
+    final TextEditingController confirmPinController;
     @override
     Widget build(BuildContext context) {
       return TextButton(
@@ -314,6 +322,8 @@
           firstNameController.clear();
           lastNameController.clear();
           confirmPasswordController.clear();
+          pinController.clear();
+          confirmPinController.clear();
         },
         child: Consumer<Loginprovider>(
           builder: (ctx, loginProvider, _) {
@@ -342,6 +352,8 @@
       required this.firstNameController,
       required this.lastNameController,
       required this.confirmPasswordController,
+      required this.pinController,
+      required this.confirmPinController
     });
 
     //Text-field-controllers
@@ -350,6 +362,8 @@
     final TextEditingController firstNameController;
     final TextEditingController lastNameController;
     final TextEditingController confirmPasswordController;
+    final TextEditingController pinController;
+    final TextEditingController confirmPinController;
 
     @override
     Widget build(BuildContext context) {
