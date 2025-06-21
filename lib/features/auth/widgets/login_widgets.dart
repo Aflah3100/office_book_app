@@ -222,11 +222,16 @@ class LoginContainer extends StatelessWidget {
                         confirmPasswordController: confirmPasswordController,
                         pinController: pinController,
                         confirmPinController: confirmPinController,
+                        clickable:
+                            (loginProvider.getAggrementChecked() &&
+                                loginProvider.getLoginMode() ==
+                                    LoginState.signUp) ||
+                            (loginProvider.getLoginMode() == LoginState.signIn),
                       ),
                       const SizedBox(height: 10),
 
                       //SignIn-SignUp-Button
-                      SignInSignUpButton(
+                      SignInSignUpTextButton(
                         emailController: emailController,
                         passwordController: passwordController,
                         firstNameController: firstNameController,
@@ -283,8 +288,8 @@ class LoginTextField extends StatelessWidget {
 }
 
 //SignIn/SignUp Button
-class SignInSignUpButton extends StatelessWidget {
-  const SignInSignUpButton({
+class SignInSignUpTextButton extends StatelessWidget {
+  const SignInSignUpTextButton({
     super.key,
     required this.emailController,
     required this.passwordController,
@@ -354,6 +359,7 @@ class LoginButton extends StatelessWidget {
     required this.confirmPasswordController,
     required this.pinController,
     required this.confirmPinController,
+    required this.clickable,
   });
 
   //Text-field-controllers
@@ -364,28 +370,34 @@ class LoginButton extends StatelessWidget {
   final TextEditingController confirmPasswordController;
   final TextEditingController pinController;
   final TextEditingController confirmPinController;
+  final bool clickable;
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () async {
-        final LoginState loginMode =
-            context.read<Loginprovider>().getLoginMode();
+        if (clickable) {
+          final LoginState loginMode =
+              context.read<Loginprovider>().getLoginMode();
 
-        //Signin-State
-        if (loginMode == LoginState.signIn) {
-          await _validateUserSignIn(context);
-        } else {
-          //SignUp-state
-          await _validateUserSignUp(context);
+          //Signin-State
+          if (loginMode == LoginState.signIn) {
+            await _validateUserSignIn(context);
+          } else {
+            //SignUp-state
+            await _validateUserSignUp(context);
+          }
         }
       },
       child: Container(
         width: 450,
         height: 48,
         decoration: BoxDecoration(
-          gradient: const LinearGradient(
-            colors: [Color(0xFFE35C35), Color(0xFFCC6B3D)],
+          gradient: LinearGradient(
+            colors:
+                clickable
+                    ? [Color(0xFFE35C35), Color(0xFFCC6B3D)]
+                    : [Color(0xFF4A4A4A), Color(0xFF3A3A3A)],
           ),
           borderRadius: BorderRadius.circular(30),
         ),
@@ -397,7 +409,10 @@ class LoginButton extends StatelessWidget {
                     ? 'LOGIN'
                     : 'SIGNUP',
                 style: GoogleFonts.publicSans(
-                  color: AppColors.textPrimary,
+                  color:
+                      clickable
+                          ? AppColors.textPrimary
+                          : AppColors.textTertiary,
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
                 ),
