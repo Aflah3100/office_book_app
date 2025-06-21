@@ -8,7 +8,6 @@ class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
   static const routeName = RouteConstants.loginScreenLinux;
 
-
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.sizeOf(context).width * 1;
@@ -53,12 +52,15 @@ class LoginScreen extends StatelessWidget {
               ),
               //Right-Side-Login-Container
               Expanded(
-                child: SizedBox(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [LoginContainer()],
+                child: Center(
+                  child: SizedBox(
+                    width: 500,
+                    child: ConstrainedBox(
+                      constraints: BoxConstraints(
+                        maxHeight: screenHeight * 0.9,
+                      ),
+                      child: LoginContainer(),
+                    ),
                   ),
                 ),
               ),
