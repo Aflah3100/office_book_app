@@ -6,7 +6,6 @@ part 'user_model.g.dart';
 
 @HiveType(typeId: 0)
 class HiveUserModel extends HiveObject {
-
   @HiveField(0)
   String userId;
 
@@ -23,6 +22,9 @@ class HiveUserModel extends HiveObject {
   String password;
 
   @HiveField(5)
+  String? pin;
+
+  @HiveField(6)
   String joinDate;
 
   HiveUserModel({
@@ -32,5 +34,6 @@ class HiveUserModel extends HiveObject {
     required this.email,
     required this.password,
     required this.joinDate,
+    this.pin,
   });
 }

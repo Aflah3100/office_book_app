@@ -9,7 +9,7 @@ import 'package:office_book_app/core/app_colors.dart';
 import 'package:office_book_app/core/app_enums.dart';
 import 'package:office_book_app/features/home/utils/home_screen_utils.dart';
 import 'package:office_book_app/features/home/widgets/app_bar.dart';
-import 'package:office_book_app/shared/hive_database/models/quotes_model.dart';
+import 'package:office_book_app/shared/models/quotes_model.dart';
 import 'package:office_book_app/shared/router/route_constants.dart';
 import 'package:office_book_app/shared/services/quotes_services.dart';
 import 'package:office_book_app/shared/services/shared_prefs.dart';

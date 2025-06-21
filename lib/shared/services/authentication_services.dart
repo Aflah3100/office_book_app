@@ -15,6 +15,7 @@ class AuthenticationServices {
   String validateSignUpCredentials({
     required HiveUserModel userModel,
     required String confirmPassword,
+    required String confirmPin,
   }) {
     //Check is user already Exists
     if (HiveUserServices.instance.checkUserExists(email: userModel.email)) {
@@ -43,6 +44,23 @@ class AuthenticationServices {
     if (userModel.password !=
         AuthenticationServices.instance.hashPassword(confirmPassword)) {
       return 'Passwords do not match.';
+    }
+
+    //Mpin-validation
+    if (userModel.pin != null) {
+      //MPIN-Empty-Validation
+      if (userModel.pin!.isEmpty) {
+        return "Please enter your MPIN";
+      }
+
+      //MPIN-length-validation
+      if (userModel.pin!.length > 4 || userModel.pin!.length < 4) {
+        return "MPIN Must be of length 4";
+      }
+
+      if (userModel.pin! != confirmPin) {
+        return "MPIN's does not match.";
+      }
     }
 
     return "";
