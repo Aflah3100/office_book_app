@@ -53,12 +53,13 @@ class AuthenticationServices {
         return "Please enter your MPIN";
       }
 
-      //MPIN-length-validation
-      if (userModel.pin!.length > 4 || userModel.pin!.length < 4) {
-        return "MPIN Must be of length 4";
-      }
+      // //MPIN-length-validation
+      // if (userModel.pin!.length > 4 || userModel.pin!.length < 4) {
+      //   return "MPIN Must be of length 4";
+      // }
 
-      if (userModel.pin! != confirmPin) {
+      if (userModel.pin! !=
+          AuthenticationServices.instance.hashPassword(confirmPin)) {
         return "MPIN's does not match.";
       }
     }

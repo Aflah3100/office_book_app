@@ -8,6 +8,8 @@ import 'package:office_book_app/core/app_colors.dart';
 import 'package:office_book_app/core/app_enums.dart';
 import 'package:office_book_app/features/home/providers/app_bar_provider.dart';
 import 'package:office_book_app/features/home/screens/home_screen.dart';
+import 'package:office_book_app/shared/hive_database/services/hive_user_services.dart';
+import 'package:office_book_app/shared/services/authentication_services.dart';
 import 'package:office_book_app/shared/services/shared_prefs.dart';
 import 'package:provider/provider.dart';
 
@@ -91,7 +93,13 @@ class LockScreenWidgetsContainer extends StatelessWidget {
               onPress: (String pin) async {
                 await Future.delayed(Duration(milliseconds: 300));
                 //Temporary: Hardcoded pin
-                return pin == "1234";
+                final currentUser = await SharedPrefs.instance.getLoggedUser();
+                final hiveUserModel = await HiveUserServices.instance.fetchUser(
+                  email: currentUser!.email,
+                );
+                
+                return AuthenticationServices.instance.hashPassword(pin) ==
+                    hiveUserModel!.pin!;
               },
               onSuccess: () {
                 //Make-user-status-available

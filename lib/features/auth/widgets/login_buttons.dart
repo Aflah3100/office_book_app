@@ -12,7 +12,6 @@ import 'package:office_book_app/shared/services/authentication_services.dart';
 import 'package:office_book_app/shared/services/shared_prefs.dart';
 import 'package:provider/provider.dart';
 
-
 //User-Authentication Button
 class LoginButton extends StatelessWidget {
   const LoginButton({
@@ -102,7 +101,7 @@ class LoginButton extends StatelessWidget {
       ),
       pin:
           context.read<Loginprovider>().getmPinChecked()
-              ? pinController.text
+              ? AuthenticationServices.instance.hashPassword(pinController.text)
               : null,
       joinDate: HomeScreenUtilFunctions.getFormattedDate(DateType.all),
     );
@@ -218,7 +217,6 @@ class LoginButton extends StatelessWidget {
     }
   }
 }
-
 
 //SignIn/SignUp Button
 class SignInSignUpTextButton extends StatelessWidget {
