@@ -9,19 +9,36 @@ import 'package:office_book_app/core/app_colors.dart';
 import 'package:office_book_app/core/app_enums.dart';
 import 'package:office_book_app/features/home/utils/home_screen_utils.dart';
 import 'package:office_book_app/features/home/widgets/app_bar.dart';
-import 'package:office_book_app/shared/models/quotes_model.dart';
+import 'package:office_book_app/shared/providers/current_user_provider.dart';
 import 'package:office_book_app/shared/router/route_constants.dart';
 import 'package:office_book_app/shared/services/quotes_services.dart';
 import 'package:office_book_app/shared/services/shared_prefs.dart';
+import 'package:provider/provider.dart';
 
-class HomeScreen extends StatelessWidget {
-  HomeScreen({super.key});
+class HomeScreen extends StatefulWidget {
+  const HomeScreen({super.key});
   static const routeName = RouteConstants.homeScreenLinux;
 
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
   final List<String> officeDeskAnimations = [
     AppAssets.officeDeskAnimation1,
     AppAssets.officeDeskAnimation2,
   ];
+
+  @override
+  void initState() {
+
+    //Get-current-user-details & Update-Current-User-Provider
+    SharedPrefs.instance.getLoggedUser().then((loggedUser) {
+      context.read<CurrentUserProvider>().setUser(loggedUser!.toJson());
+    });
+
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {

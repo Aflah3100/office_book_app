@@ -7,6 +7,7 @@ import 'package:office_book_app/features/auth/screens/lock_screen.dart';
 import 'package:office_book_app/features/auth/screens/login_screen.dart';
 import 'package:office_book_app/features/home/providers/app_bar_provider.dart';
 import 'package:office_book_app/features/home/widgets/dynamic_search_field.dart';
+import 'package:office_book_app/shared/providers/current_user_provider.dart';
 import 'package:office_book_app/shared/services/authentication_services.dart';
 import 'package:office_book_app/shared/services/shared_prefs.dart';
 import 'package:provider/provider.dart';
@@ -232,29 +233,33 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
                             ),
                           ),
                           //Lock-screen-button
-                          Center(
-                            child: ElevatedButton.icon(
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: const Color(0xFF3A3A3A),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10),
+                          Consumer<CurrentUserProvider>(
+                            builder: (ctx,currentUserProvider,_) {
+                              return (currentUserProvider.currentUser.isPinchecked)?Center(
+                                child: ElevatedButton.icon(
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: const Color(0xFF3A3A3A),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                  ),
+                                  icon: const Icon(
+                                    Icons.lock_clock_outlined,
+                                    color: Colors.white,
+                                  ),
+                                  onPressed: () {
+                                    Navigator.pushNamed(
+                                      context,
+                                      LockScreen.routeName,
+                                    );
+                                  },
+                                  label: Text(
+                                    "Lock Screen",
+                                    style: TextStyle(color: AppColors.textPrimary),
+                                  ),
                                 ),
-                              ),
-                              icon: const Icon(
-                                Icons.lock_clock_outlined,
-                                color: Colors.white,
-                              ),
-                              onPressed: () {
-                                Navigator.pushNamed(
-                                  context,
-                                  LockScreen.routeName,
-                                );
-                              },
-                              label: Text(
-                                "Lock Screen",
-                                style: TextStyle(color: AppColors.textPrimary),
-                              ),
-                            ),
+                              ):SizedBox();
+                            }
                           ),
                         ],
                       );

@@ -9,6 +9,7 @@ import 'package:office_book_app/features/home/screens/home_screen.dart';
 import 'package:office_book_app/shared/hive_database/services/hive_initializer.dart';
 import 'package:office_book_app/shared/hive_database/services/hive_user_services.dart';
 import 'package:office_book_app/shared/models/user_model.dart';
+import 'package:office_book_app/shared/providers/current_user_provider.dart';
 import 'package:office_book_app/shared/providers/login_provider.dart';
 import 'package:office_book_app/shared/router/generate_route.dart';
 import 'package:office_book_app/shared/services/shared_prefs.dart';
@@ -17,7 +18,6 @@ import 'package:window_size/window_size.dart' as window_size;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
 
   await HiveInitializer.instance.initHive();
   // await HiveUserServices.instance.clearAllUsers();
@@ -40,6 +40,7 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (_) => Loginprovider()),
         ChangeNotifierProvider(create: (_) => AppBarProvider()),
+        ChangeNotifierProvider(create: (_) => CurrentUserProvider()),
       ],
       child: MaterialApp(
         title: 'Office Book',

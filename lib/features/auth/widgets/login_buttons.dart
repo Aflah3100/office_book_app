@@ -128,6 +128,7 @@ class LoginButton extends StatelessWidget {
             lastName: userModel.lastName ?? "",
             email: userModel.email,
             dateOfJoin: userModel.joinDate,
+            isPinchecked: context.read<Loginprovider>().getmPinChecked()
           ),
         );
         if (sharedPrefStatus) {
@@ -182,6 +183,7 @@ class LoginButton extends StatelessWidget {
             lastName: userModel.lastName ?? "",
             email: userModel.email,
             dateOfJoin: userModel.joinDate,
+            isPinchecked: userModel.pin!=null
           ),
         );
 

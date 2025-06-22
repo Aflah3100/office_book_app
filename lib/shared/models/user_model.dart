@@ -6,6 +6,7 @@ class UserModel {
   final String email;
   final String dateOfJoin;
   final String userId;
+  final bool isPinchecked;
 
   UserModel({
     required this.userId,
@@ -13,6 +14,7 @@ class UserModel {
     required this.lastName,
     required this.email,
     required this.dateOfJoin,
+    required this.isPinchecked
   });
 
   Map<String, dynamic> toMap() => {
@@ -20,7 +22,8 @@ class UserModel {
     "lastName": lastName ?? "",
     "email": email,
     "dateOfJoin": dateOfJoin,
-    "userId":userId
+    "userId":userId,
+    "isPinChecked":isPinchecked
   };
 
   factory UserModel.fromMap(Map<String, dynamic> userMap) => UserModel(
@@ -29,6 +32,7 @@ class UserModel {
     lastName: userMap["lastName"],
     email: userMap["email"],
     dateOfJoin: userMap["dateOfJoin"],
+    isPinchecked: userMap['isPinChecked']
   );
 
   String toJson() => json.encode(toMap());
