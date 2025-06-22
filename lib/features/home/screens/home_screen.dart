@@ -31,7 +31,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void initState() {
-
     //Get-current-user-details & Update-Current-User-Provider
     SharedPrefs.instance.getLoggedUser().then((loggedUser) {
       context.read<CurrentUserProvider>().setUser(loggedUser!.toJson());
@@ -143,39 +142,30 @@ class _HomeScreenState extends State<HomeScreen> {
                                       ),
 
                                       // User Name
-                                      FutureBuilder<String>(
-                                        future: _getUserName(),
-                                        builder: (ctx, snapshot) {
-                                          if (snapshot.connectionState ==
-                                              ConnectionState.waiting) {
-                                            // you can use a placeholder with the same height.
-                                            return const SizedBox(height: 35);
-                                          } else if (snapshot.hasData) {
-                                            return FittedBox(
-                                              fit: BoxFit.scaleDown,
-                                              alignment: Alignment.centerLeft,
-                                              child: ShaderMask(
-                                                shaderCallback:
-                                                    (bounds) => LinearGradient(
-                                                      colors: [
-                                                        AppColors.primaryOrange,
-                                                        AppColors
-                                                            .primaryOrangeLight,
-                                                      ],
-                                                    ).createShader(bounds),
-                                                blendMode: BlendMode.srcIn,
-                                                child: Text(
-                                                  snapshot.data!,
-                                                  style: GoogleFonts.publicSans(
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: 30,
-                                                  ),
+                                      Consumer<CurrentUserProvider>(
+                                        builder: (ctx, currentUserProvider, _) {
+                                          return FittedBox(
+                                            fit: BoxFit.scaleDown,
+                                            alignment: Alignment.centerLeft,
+                                            child: ShaderMask(
+                                              shaderCallback:
+                                                  (bounds) => LinearGradient(
+                                                    colors: [
+                                                      AppColors.primaryOrange,
+                                                      AppColors
+                                                          .primaryOrangeLight,
+                                                    ],
+                                                  ).createShader(bounds),
+                                              blendMode: BlendMode.srcIn,
+                                              child: Text(
+                                                '${currentUserProvider.currentUser.firstName.toUpperCase()} ${currentUserProvider.currentUser.lastName?.toUpperCase()}',
+                                                style: GoogleFonts.publicSans(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 30,
                                                 ),
                                               ),
-                                            );
-                                          } else {
-                                            return const SizedBox.shrink();
-                                          }
+                                            ),
+                                          );
                                         },
                                       ),
                                       const SizedBox(height: 12),

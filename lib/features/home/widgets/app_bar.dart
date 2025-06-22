@@ -94,8 +94,6 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
     final RenderBox overlay =
         Overlay.of(context).context.findRenderObject() as RenderBox;
 
-    final loggedUser = await SharedPrefs.instance.getLoggedUser();
-
     await showMenu(
       context: context,
       position: RelativeRect.fromRect(
@@ -142,17 +140,30 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
                       ),
                       Divider(),
                       //User-Details
-                      Text(
-                        "👤 ${loggedUser!.firstName} ${loggedUser.lastName}",
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: AppColors.textPrimary,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                      Text(
-                        loggedUser.email,
-                        style: TextStyle(fontSize: 12, color: Colors.grey),
+                      Consumer<CurrentUserProvider>(
+                        builder: (ctx, currentUserProvider, _) {
+                          return Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "👤 ${currentUserProvider.currentUser.firstName} ${currentUserProvider.currentUser.lastName}",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: AppColors.textPrimary,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
+                              Text(
+                                currentUserProvider.currentUser.email,
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  color: Colors.grey,
+                                ),
+                              ),
+                            ],
+                          );
+                        },
                       ),
                     ],
                   ),
@@ -234,32 +245,42 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
                           ),
                           //Lock-screen-button
                           Consumer<CurrentUserProvider>(
-                            builder: (ctx,currentUserProvider,_) {
-                              return (currentUserProvider.currentUser.isPinchecked)?Center(
-                                child: ElevatedButton.icon(
-                                  style: ElevatedButton.styleFrom(
-                                    backgroundColor: const Color(0xFF3A3A3A),
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(10),
+                            builder: (ctx, currentUserProvider, _) {
+                              return (currentUserProvider
+                                      .currentUser
+                                      .isPinchecked)
+                                  ? Center(
+                                    child: ElevatedButton.icon(
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: const Color(
+                                          0xFF3A3A3A,
+                                        ),
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(
+                                            10,
+                                          ),
+                                        ),
+                                      ),
+                                      icon: const Icon(
+                                        Icons.lock_clock_outlined,
+                                        color: Colors.white,
+                                      ),
+                                      onPressed: () {
+                                        Navigator.pushNamed(
+                                          context,
+                                          LockScreen.routeName,
+                                        );
+                                      },
+                                      label: Text(
+                                        "Lock Screen",
+                                        style: TextStyle(
+                                          color: AppColors.textPrimary,
+                                        ),
+                                      ),
                                     ),
-                                  ),
-                                  icon: const Icon(
-                                    Icons.lock_clock_outlined,
-                                    color: Colors.white,
-                                  ),
-                                  onPressed: () {
-                                    Navigator.pushNamed(
-                                      context,
-                                      LockScreen.routeName,
-                                    );
-                                  },
-                                  label: Text(
-                                    "Lock Screen",
-                                    style: TextStyle(color: AppColors.textPrimary),
-                                  ),
-                                ),
-                              ):SizedBox();
-                            }
+                                  )
+                                  : SizedBox();
+                            },
                           ),
                         ],
                       );
