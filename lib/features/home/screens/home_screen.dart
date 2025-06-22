@@ -90,7 +90,6 @@ class HomeScreen extends StatelessWidget {
                             ),
 
                             // Greeting and Quotes
-                            // Greeting and Quotes
                             Expanded(
                               child: Padding(
                                 padding: const EdgeInsets.symmetric(

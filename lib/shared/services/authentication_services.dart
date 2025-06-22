@@ -2,7 +2,7 @@
 import 'dart:convert';
 
 import 'package:crypto/crypto.dart';
-import 'package:office_book_app/shared/hive_database/models/user_model.dart';
+import 'package:office_book_app/shared/hive_database/models/hive_user_model.dart';
 import 'package:office_book_app/shared/hive_database/services/hive_user_services.dart';
 import 'package:office_book_app/shared/services/shared_prefs.dart';
 

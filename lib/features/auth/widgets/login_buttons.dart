@@ -5,7 +5,7 @@ import 'package:office_book_app/core/app_colors.dart';
 import 'package:office_book_app/core/app_enums.dart';
 import 'package:office_book_app/features/home/screens/home_screen.dart';
 import 'package:office_book_app/features/home/utils/home_screen_utils.dart';
-import 'package:office_book_app/shared/hive_database/models/user_model.dart';
+import 'package:office_book_app/shared/hive_database/models/hive_user_model.dart';
 import 'package:office_book_app/shared/models/user_model.dart';
 import 'package:office_book_app/shared/providers/login_provider.dart';
 import 'package:office_book_app/shared/services/authentication_services.dart';

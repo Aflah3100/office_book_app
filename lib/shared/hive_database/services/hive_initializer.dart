@@ -1,5 +1,5 @@
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:office_book_app/shared/hive_database/models/user_model.dart';
+import 'package:office_book_app/shared/hive_database/models/hive_user_model.dart';
 
 class HiveInitializer {
   HiveInitializer._internal();

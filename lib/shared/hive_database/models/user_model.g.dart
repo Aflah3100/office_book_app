@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'user_model.dart';
+part of 'hive_user_model.dart';
 
 // **************************************************************************
 // TypeAdapterGenerator

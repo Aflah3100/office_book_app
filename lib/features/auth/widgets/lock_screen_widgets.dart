@@ -92,7 +92,6 @@ class LockScreenWidgetsContainer extends StatelessWidget {
             PinTextField(
               onPress: (String pin) async {
                 await Future.delayed(Duration(milliseconds: 300));
-                //Temporary: Hardcoded pin
                 final currentUser = await SharedPrefs.instance.getLoggedUser();
                 final hiveUserModel = await HiveUserServices.instance.fetchUser(
                   email: currentUser!.email,
