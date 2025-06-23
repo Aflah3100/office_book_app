@@ -5,6 +5,7 @@ import 'package:hive/hive.dart';
 import 'package:office_book_app/core/app_colors.dart';
 import 'package:office_book_app/features/auth/screens/login_screen.dart';
 import 'package:office_book_app/features/home/providers/app_bar_provider.dart';
+import 'package:office_book_app/features/home/providers/nav_bar_provider.dart';
 import 'package:office_book_app/features/home/screens/home_screen.dart';
 import 'package:office_book_app/shared/hive_database/services/hive_initializer.dart';
 import 'package:office_book_app/shared/hive_database/services/hive_user_services.dart';
@@ -47,6 +48,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => Loginprovider()),
         ChangeNotifierProvider(create: (_) => AppBarProvider()),
         ChangeNotifierProvider(create: (_) => CurrentUserProvider()),
+        ChangeNotifierProvider(create: (_)=> NavBarProvider())
       ],
       child: MaterialApp(
         title: 'Office Book',

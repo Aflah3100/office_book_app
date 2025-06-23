@@ -7,8 +7,10 @@ import 'package:lottie/lottie.dart';
 import 'package:office_book_app/core/app_assets.dart';
 import 'package:office_book_app/core/app_colors.dart';
 import 'package:office_book_app/core/app_enums.dart';
+import 'package:office_book_app/features/home/providers/nav_bar_provider.dart';
 import 'package:office_book_app/features/home/utils/home_screen_utils.dart';
 import 'package:office_book_app/features/home/widgets/app_bar.dart';
+import 'package:office_book_app/features/home/widgets/collapsible_nav_bar.dart';
 import 'package:office_book_app/shared/providers/current_user_provider.dart';
 import 'package:office_book_app/shared/router/route_constants.dart';
 import 'package:office_book_app/shared/services/quotes_services.dart';
@@ -290,6 +292,38 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ],
                   ),
+                ),
+              ),
+
+              //Home-Body-Container
+              Expanded(
+                child: Row(
+                  children: [
+                    Consumer<NavBarProvider>(
+                      builder: (ctx, navBarProvider, _) {
+                        return CollapsibleNavBar(
+                          selectedItem: navBarProvider.getSelectedNavItem(),
+                          onItemSelected: (navItem) {
+                            navBarProvider.setNavItem(navItem);
+                          },
+                        );
+                      },
+                    ),
+                    Expanded(
+                      child: Container(
+                        color: Colors.blue,
+                        child: Consumer<NavBarProvider>(
+                          builder: (ctx, navBarProvider, _) {
+                            return Center(
+                              child: Text(
+                                navBarProvider.getSelectedNavItem().toString(),
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ],
