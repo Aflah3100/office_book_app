@@ -4,6 +4,7 @@ import 'package:office_book_app/core/app_colors.dart';
 import 'package:office_book_app/core/app_enums.dart';
 import 'package:office_book_app/features/auth/screens/lock_screen.dart';
 import 'package:office_book_app/features/home/providers/app_bar_provider.dart';
+import 'package:office_book_app/shared/providers/current_user_provider.dart';
 import 'package:provider/provider.dart';
 
 class DynamicSearchField extends StatefulWidget {
@@ -95,28 +96,39 @@ class _DynamicSearchFieldState extends State<DynamicSearchField> {
                 itemCount: _filteredCommands.length,
                 itemBuilder: (ctx, index) {
                   final cmd = _filteredCommands[index];
-                  return ListTile(
-                    title: Text(
-                      cmd['command'],
-                      style: TextStyle(color: Colors.white),
-                    ),
-                    trailing: Text(
-                      cmd['message'],
-                      style: TextStyle(
-                        color: AppColors.textTertiary,
-                        fontSize: 13,
-                      ),
-                    ),
-                    onTap: () {
-                      searchFieldController.clear();
-                      context.read<AppBarProvider>().setUserStatus(
-                        cmd['status'],
-                      );
-                      if (cmd['command'] == '/lock') {
-                        //Route-to-lock-screen
-                        Navigator.pushNamed(context, LockScreen.routeName);
+                  return Consumer<CurrentUserProvider>(
+                    builder: (ctx, currentUserProvider, _) {
+                      final isLockCommand = cmd['command'] == '/lock';
+                      final isPinChecked =
+                          currentUserProvider.currentUser.isPinchecked;
+
+                      if (isLockCommand && !isPinChecked) {
+                        return SizedBox();
                       }
-                      _removeOverlay();
+
+                      return ListTile(
+                        title: Text(
+                          cmd['command'],
+                          style: TextStyle(color: Colors.white),
+                        ),
+                        trailing: Text(
+                          cmd['message'],
+                          style: TextStyle(
+                            color: AppColors.textTertiary,
+                            fontSize: 13,
+                          ),
+                        ),
+                        onTap: () {
+                          searchFieldController.clear();
+                          context.read<AppBarProvider>().setUserStatus(
+                            cmd['status'],
+                          );
+                          if (isLockCommand) {
+                            Navigator.pushNamed(context, LockScreen.routeName);
+                          }
+                          _removeOverlay();
+                        },
+                      );
                     },
                   );
                 },
