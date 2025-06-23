@@ -20,7 +20,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await HiveInitializer.instance.initHive();
-  // await HiveUserServices.instance.clearAllUsers();
+  // await _clearAllUsers();
 
   //Fixing-Window-Size for linux platforms
   if (Platform.isLinux || Platform.isWindows) {
@@ -28,6 +28,12 @@ void main() async {
     window_size.setWindowMinSize(minSize);
   }
   runApp(const MyApp());
+}
+
+Future<void> _clearAllUsers() async {
+  await HiveUserServices.instance.clearAllUsers();
+  await SharedPrefs.instance.deleteLoggedUser();
+  //Refresh after calling to signout
 }
 
 class MyApp extends StatelessWidget {
